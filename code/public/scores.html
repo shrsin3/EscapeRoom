@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
+  <!-- <link rel="stylesheet" href="styles.css">   -->
+
+  <title>Team Scores</title>
+</head>
+<body>
+<!-- ===================================================================================== -->
+<!-- Display the current status of the database connection.
+     !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
+     -->
+  <h1>Database Connection Status:
+    <!-- An in-line placeholder to display connection status. -->
+    <span id="dbStatus"> </span>
+    <!-- A loading GIF, will be hided once get the status. -->
+    <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">
+  </h1>
+
+  <br><hr><br>
+
+  <!-- Show 'Scoretable'.
+          Data will be fetched and inserted here dynamically using JavaScript. -->
+  <h2>Show Scores</h2>
+  <table id="scoreTable" border="1">
+    <thead>
+    <tr>
+      <!--Table head, need to be adjusted accordingly to align with your own.-->
+      <th>Team Name</th>
+      <th>Score</th>
+      <th>Puzzle ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+
+  <br><hr><br> <!-- ========================================================================= -->
+
+  <h2> Insert Scores for Teams</h2>
+  <form id="insertScore">
+    Team Name: <input type="text" id="teamName" placeholder="Enter team Name" maxlength="50"> <br><br>
+    Score: <input type="number" id="score" placeholder="Enter Score" maxlength="50"> <br><br>
+    Puzzle ID: <input type="number" id="spuzzleId" placeholder="Enter Puzzle ID" maxlength="50"> <br><br>
+
+    <button type="submit"> insert </button> <br>
+  </form>
+  <div id="insertScoreResultMsg"></div>
+  <br><hr><br> <!-- ========================================================================= -->
+
+  <h2>Show Teams And Scores</h2>
+  <form id="GroupedScores">
+    Filter Value: <select id="filterValue" name="filterValue">
+    <option value= "Minimum">Minimum</option>
+    <option value= "Maximum">Maximum</option>
+    <option value= "Average">Average</option>
+  </select> <br><br>
+
+    <button type="submit"> show </button> <br>
+  </form>
+  <!-- A placeholder to display messages related to the update operation. -->
+  <div id="groupedScoreResultMsg"></div>
+
+  <table id="scoreNTeamsTable" border="1">
+    <thead>
+    <tr>
+      <!--Table head, need to be adjusted accordingly to align with your own.-->
+      <th>TeamName</th>
+      <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+  <script src="scoresPage.js"></script>
+</body>
+</html>

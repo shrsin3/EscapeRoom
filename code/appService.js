@@ -360,6 +360,7 @@ async function initialization() {
 }
 
 module.exports = {
+    withOracleDB,
     testOracleConnection,
     fetchPositionSalaryFromDb,
     fetchViewerProfile,
