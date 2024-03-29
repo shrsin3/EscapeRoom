@@ -31,19 +31,46 @@
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2> Update Salary </h2>
-    <label for="position">Position:</label>
+    <label for="position">Position ID:</label>
     <select id="position">
     </select>
 
+    <br>
+
+    <label for="positionName">New PositionName:</label>
+    <input id="positionName" placeholder="New position name" />
+    <button id="updatePositionName">Update Position</button>
+
+    <div id="updatePositionNameResult"></div>
+
+    <br>
+
     <label for="salary">New Salary:</label>
-    <input type="number" id="salary" placeholder="Enter new salary (integer only)" />
+    <input type="number" id="salary" placeholder="New salary (integer only)" />
     <button id="updateSalary">Update Salary</button>
 
     <div id="updateSalaryResult"></div>
 
+    <br>
+    
+    <table id="PositionSalary" border="1">
+        <thead>
+            <tr>
+                <!--Table head, need to be adjusted accordingly to align with your own.-->
+                <th>Position ID</th>
+                <th>Posistion Name</th>
+                <th>Salary</thth>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2> Manage Puzzle and Prop </h2>
+    <button id="ManagePuzzle">Manage Puzzle</button>
+    <button id="ManageProp">Manage Prop</button>
 
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="employeeScripts.js"></script>

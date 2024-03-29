@@ -61,5 +61,6 @@ async function fetchEmployeeProfile() {
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     checkDbConnection();
-    document.getElementById('PlayerProfile').addEventListener('click', fetchEmployeeProfile);    
+    document.getElementById('PlayerProfile').addEventListener('click', fetchEmployeeProfile);
+    // document.getElementById('BookRoom').addEventListener('click', );
 };

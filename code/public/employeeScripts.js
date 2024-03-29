@@ -61,15 +61,40 @@ async function fetchPositionSalary() {
         method: 'GET'
     });
     const responseData = await response.json();
-    const positions = await responseData.data[0]
+    const positions = responseData.data;
+
     console.log(positions)
     const dropdown = document.getElementById('position');
     positions.forEach(position => {
         const option = document.createElement('option');
-        option.value = position;
-        option.textContent = position;
+        option.value = position[0];
+        option.textContent = position[0];
         dropdown.appendChild(option);
     });
+}
+
+async function fetchPositionSalaryRow() {
+    const response = await fetch('/PositionSalary', {
+        method: 'GET'
+    });
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    const tableElement = document.getElementById('PositionSalary');
+    const tableBody = tableElement.querySelector('tbody');
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(position => {
+        const row = tableBody.insertRow();
+        position.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+
 }
 
 async function updateSalary() {
@@ -98,6 +123,38 @@ async function updateSalary() {
 
     messageElement.textContent = responseData.message;
     console.log(document.getElementById('eprofile').innerHTML.trim().length)
+    fetchPositionSalaryRow();
+    if(!(document.getElementById('eprofile').innerHTML.trim().length === 0)){
+        fetchEmployeeProfile();
+    }
+}
+
+async function updatePositionName() {
+    const positionValue = document.getElementById('position').value;
+    const positionNameValue = document.getElementById('positionName').value;
+
+    if (!positionNameValue) {
+        alert("Please enter a valid position name.");
+        return;
+    }
+
+    const response = await fetch('/update-positionname', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            position: positionValue, 
+            positionName: positionNameValue
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('updatePositionNameResult');
+
+    messageElement.textContent = responseData.message;
+    console.log(document.getElementById('eprofile').innerHTML.trim().length)
+    fetchPositionSalaryRow();
     if(!(document.getElementById('eprofile').innerHTML.trim().length === 0)){
         fetchEmployeeProfile();
     }
@@ -110,6 +167,10 @@ async function updateSalary() {
 window.onload = function() {
     checkDbConnection();
     fetchPositionSalary();
+    fetchPositionSalaryRow();
     document.getElementById('employeeProfile').addEventListener('click', fetchEmployeeProfile);
-    document.getElementById('updateSalary').addEventListener('click', updateSalary);    
+    document.getElementById('updateSalary').addEventListener('click', updateSalary); 
+    document.getElementById('updatePositionName').addEventListener('click', updatePositionName);
+    // document.getElementById('ManagePuzzle').addEventListener('click', )
+    // document.getElementById('ManageProp').addEventListener('click', )
 };

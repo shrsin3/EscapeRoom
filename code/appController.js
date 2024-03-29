@@ -54,6 +54,17 @@ router.post('/update-salary', async (req, res) => {
     }
 });
 
+router.post('/update-positionname', async (req, res) => {
+    const { position, positionName } = req.body;
+    const updateResult = await appService.updatePositionName(position, positionName)
+
+    if (updateResult.success) {
+        res.json({ success: true, message: 'Salary updated successfully'});
+    } else {
+        res.status(500).json({ success: false, message: updateResult.message});
+    }
+});
+
 router.post('/login', async (req, res) => {
     const { email, password, userType } = req.body;
     var isLoggedin = false

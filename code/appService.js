@@ -87,7 +87,7 @@ async function fetchUserstableFromDb() {
 
 async function fetchPositionSalaryFromDb() {
     return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT Position FROM PositionSalary');
+        const result = await connection.execute('SELECT * FROM PositionSalary');
         return result.rows;
     }).catch(() => {
         return [];
@@ -238,6 +238,53 @@ async function updateSalary(position, salary) {
     })
 }
 
+async function updatePositionName(position, positionName) {
+    return await withOracleDB(async (connection) => {
+        console.log('position, name', position, positionName)
+        const checkExisted = await connection.execute(`
+            SELECT COUNT(*)
+            FROM PositionSalary
+            WHERE Position = :position
+            `,
+            [position]
+        );
+        
+        if (checkExisted.rows[0][0] === 0) {
+            return {success: false, message: 'Position not found'}
+        }
+
+        const checkPositionNameExist = await connection.execute(`
+            SELECT COUNT(*)
+            FROM PositionSalary
+            WHERE PositionName = :positionName AND Position != :position
+            `,
+            [positionName, position]
+        );
+
+        console.log(checkPositionNameExist.rows[0][0]);
+        if (checkPositionNameExist.rows[0][0] > 0) {
+            return {success: false, message: 'Position name already exists for another position'}
+        }
+
+        const result = await connection.execute(`
+            UPDATE PositionSalary
+            SET PositionName = :positionName
+            WHERE Position = :position
+            `,
+            [positionName, position],
+            { autoCommit: true }
+        );
+
+        if (result.rowsAffected && result.rowsAffected > 0) {
+            return {success: true}
+        } else {
+            return {success: false, message: 'Error updating positionName'}
+        }
+    }).catch(() => {
+        return false;
+    })
+}
+
 async function initialization() {
     return await withOracleDB(async (connection) => {
         const tables = ['Users', 'PostalCity', 'Employee', 'PositionSalary', 'Viewer', 'PlayerPartOf', 'Team'];
@@ -270,14 +317,15 @@ async function initialization() {
         await connection.execute(`
             CREATE TABLE Employee (
                 Email VARCHAR2(100) PRIMARY KEY, 
-                Position VARCHAR2(100) NOT NULL,
+                Position INTEGER NOT NULL,
                 FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
             )            
         `);
 
         await connection.execute(`
             CREATE TABLE PositionSalary (
-                Position VARCHAR2(100) PRIMARY KEY, 
+                Position INTEGER PRIMARY KEY,
+                PositionName VARCHAR2(100) NOT NULL UNIQUE,
                 Salary INTEGER NOT NULL
             )            
         `);
@@ -317,7 +365,7 @@ async function initialization() {
 
         await connection.execute(`
         INSERT INTO Users (Name, Email, Address, PostalCode, PassWord) VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', '123')
-    `);
+        `);
 
         await connection.execute(`
             INSERT INTO PostalCity (PostalCode, City) VALUES ('V6V A03', 'Vancouver')
@@ -328,11 +376,15 @@ async function initialization() {
         `);
 
         await connection.execute(`
-            INSERT INTO Employee (Email, Position) VALUES ('user1@gmail.com', 'Manager')
+            INSERT INTO Employee (Email, Position) VALUES ('user1@gmail.com', 1)
         `);
 
         await connection.execute(`
-            INSERT INTO PositionSalary (Position, Salary) VALUES ('Manager', 70000)
+            INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (1, 'Manager', 70000)
+        `);
+
+        await connection.execute(`
+            INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (2, 'Front-desk', 50000)
         `);
 
         await connection.execute(`
@@ -369,6 +421,7 @@ module.exports = {
     loginAsEmployee,
     loginAsPlayer,
     updateSalary,
+    updatePositionName,
     initialization,
     fetchUserstableFromDb
 };
