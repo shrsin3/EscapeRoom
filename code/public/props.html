@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- This meta tag ensures that the website renders correctly across different device sizes, enhancing mobile responsiveness. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Link to the external CSS stylesheet. Uncomment if you wish to customize or add styling. -->
+  <!-- <link rel="stylesheet" href="styles.css">   -->
+
+  <title>Props Page</title>
+</head>
+<body>
+<!-- ===================================================================================== -->
+<!-- Display the current status of the database connection.
+     !!HERE TO HELP U DEBUGGING, NOT REQUIRED IN YOUR OWN PROJECT!!
+     -->
+<h1>Database Connection Status:
+  <!-- An in-line placeholder to display connection status. -->
+  <span id="dbStatus"> </span>
+  <!-- A loading GIF, will be hided once get the status. -->
+  <img id="loadingGif" class="loading-gif" src="loading_100px.gif" alt="Loading...">
+</h1>
+
+<br><hr><br> <!-- ========================================================================= -->
+
+<!-- Show 'Scoretable'.
+       Data will be fetched and inserted here dynamically using JavaScript. -->
+<h2>Show Props</h2>
+<table id="propTable" border="1">
+  <thead>
+  <tr>
+    <!--Table head, need to be adjusted accordingly to align with your own.-->
+    <th>Puzzle ID</th>
+    <th>Prop ID</th>
+    <th>Prop Name</th>
+    <th>Prop Status</th>
+    <th>Puzzle Name</th>
+    <th>Escape Room Name</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+
+<br><hr><br> <!-- ========================================================================= -->
+
+<h2> Insert Props for Puzzle</h2>
+<form id="insertProp">
+  Prop ID: <input type="number" id="propID" placeholder="Enter Prop ID" maxlength="50"> <br><br>
+  Prop Name: <input type="text" id="propName" placeholder="Enter Prop Name" maxlength="50"> <br><br>
+  Prop Status: <select id="propStatus" name="status">
+  <option value= "Intact">Intact</option>
+  <option value= "Damaged">Damaged</option>
+</select> <br><br>
+  Puzzle ID: <input type="number" id="prPuzzleId" placeholder="Enter Puzzle ID" maxlength="50"> <br><br>
+
+  <button type="submit"> insert </button> <br>
+</form>
+<div id="insertPropResultMsg"></div>
+
+<br><hr><br> <!-- ========================================================================= -->
+
+<h2>Update Status of Props</h2>
+<form id="updatePropStatus">
+  Prop ID: <input type="number" id="uPropID" placeholder="Enter Prop ID" maxlength="50"> <br><br>
+  Prop Status: <select id="uPropStatus" name="status">
+  <option value= "Intact">Intact</option>
+  <option value= "Damaged">Damaged</option>
+</select> <br><br>
+
+  <button type="submit"> update </button> <br>
+</form>
+<!-- A placeholder to display messages related to the update operation. -->
+<div id="updatePropStatusResultMsg"></div>
+<br><hr><br> <!-- ========================================================================= -->
+
+<h2>Delete Prop</h2>
+<form id="deleteProp">
+  Prop ID: <input type="number" id="dPropID" placeholder="Enter Prop ID" maxlength="50"> <br><br>
+
+  <button type="submit"> delete </button> <br>
+</form>
+<!-- A placeholder to display messages related to the update operation. -->
+<div id="updatePropDeleteResultMsg"></div>
+<br><hr><br> <!-- ========================================================================= -->
+
+
+<!-- ===================================================================================== -->
+<!-- External JavaScript file that contains the functionality/logic for the operations above. -->
+<script src="propsPage.js"></script>
+
+</body>
+</html>
