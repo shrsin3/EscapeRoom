@@ -28,6 +28,21 @@ router.get('/PositionSalary', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/PositionSalaryDrop', async (req, res) => {
+    const tableContent = await appService.fetchPositionSalaryDropFromDb();
+    res.json({data: tableContent});
+});
+
+router.get('/playerprofileforviewer', async (req, res) => {
+    const tableContent = await appService.fetchPlayerProfileForViewerFromDb();
+    res.json({data: tableContent});
+});
+
+router.get('/teamprofileforviewer', async (req, res) => {
+    const tableContent = await appService.fetchTeamProfileForViewerFromDb();
+    res.json({data: tableContent});
+});
+
 router.get('/viewerprofile', async (req, res) => {
     const email = req.query.email;
     const tableContent = await appService.fetchViewerProfile(email);
@@ -46,23 +61,29 @@ router.get('/playerprofile', async (req, res) => {
     res.json({data: tableContent});
 })
 
-router.post('/update-salary', async (req, res) => {
-    const { position, salary} = req.body;
-    const updateResult = await appService.updateSalary(position, salary);
+router.get('/alltablenames', async (req, res) => {
+    const tableContent = await appService.fetchAllTableNamesFromDb();
+    res.json({data: tableContent});
+})
+
+router.get('/allattributes', async (req, res) => {
+    const table = req.query.table
+    const tableContent = await appService.fetchTableAttributesFromDb(table);
+    res.json({data: tableContent});
+})
+
+router.get('/tuples', async (req, res) => {
+    const { tableName, attributes } = req.query;
+    const tableContent = await appService.fetchTableTuplesFromDb(tableName, attributes);
+    res.json({data: tableContent});
+})
+
+router.post('/update-positionsalary', async (req, res) => {
+    const { position, salary, positionName} = req.body;
+    const updateResult = await appService.updatePositionSalary(position, salary, positionName);
 
     if (updateResult.success) {
-        res.json({ success: true, message: 'Salary updated successfully'});
-    } else {
-        res.status(500).json({ success: false, message: result.message});
-    }
-});
-
-router.post('/update-positionname', async (req, res) => {
-    const { position, positionName } = req.body;
-    const updateResult = await appService.updatePositionName(position, positionName)
-
-    if (updateResult.success) {
-        res.json({ success: true, message: 'Salary updated successfully'});
+        res.json({ success: true, message: 'Updated successfully'});
     } else {
         res.status(500).json({ success: false, message: updateResult.message});
     }
@@ -70,7 +91,7 @@ router.post('/update-positionname', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password, userType } = req.body;
-    var isLoggedin = false
+    var isLoggedin = {success: false, message: ''};
 
     if (userType === 'Viewer') {
         isLoggedin = await appService.loginAsViewer(email, password);
@@ -80,10 +101,10 @@ router.post('/login', async (req, res) => {
         isLoggedin = await appService.loginAsPlayer(email, password);
     }
 
-    if(isLoggedin) {
-        res.json({ success: true, userType: userType });
+    if(isLoggedin.success) {
+        res.json({ success: true, message: 'Login successfully' });
     } else {
-        res.status(500).json({ success: false })
+        res.status(500).json({ success: false, message: isLoggedin.message })
     }
 });
 

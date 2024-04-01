@@ -52,8 +52,58 @@ async function fetchViewerProfile() {
     if(responseData.data.length > 0) {
         const profile = responseData.data[0]
         console.log(profile)
-        document.getElementById('vprofile').innerHTML = `<br>Name: ${profile[0]}<br>Email: ${profile[1]}<br>Address: ${profile[2]}<br>PostalCode: ${profile[3]} <br>City: ${profile[6]} <br>Age: ${profile[5]}`;
+        document.getElementById('vprofile').innerHTML = `<br>Name: ${profile[0]}<br>Email: ${profile[1]}<br>Address: ${profile[2]}<br>PostalCode: ${profile[3]} <br>City: ${profile[4]} <br>Age: ${profile[5]}`;
     }
+}
+
+async function fetchPlayerProfile() {
+    const tableElement = document.getElementById('Playertable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/playerprofileforviewer', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+async function fetchTeamProfile() {
+    const tableElement = document.getElementById('Teamtable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/teamprofileforviewer', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const demotableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
 }
 
 // ---------------------------------------------------------------
@@ -62,4 +112,6 @@ async function fetchViewerProfile() {
 window.onload = function() {
     checkDbConnection();
     document.getElementById('viewProfile').addEventListener('click', fetchViewerProfile);    
+    document.getElementById('viewTeam').addEventListener('click', fetchTeamProfile);    
+    document.getElementById('viewPlayer').addEventListener('click', fetchPlayerProfile);    
 };

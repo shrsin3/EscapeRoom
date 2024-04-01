@@ -52,7 +52,7 @@ async function fetchEmployeeProfile() {
     if(responseData.data.length > 0) {
         const profile = responseData.data[0]
         console.log(profile)
-        document.getElementById('eprofile').innerHTML = `<br>Name: ${profile[0]}<br>Email: ${profile[1]}<br>Address: ${profile[2]}<br>PostalCode: ${profile[3]} <br>City: ${profile[11]} <br>Alias: ${profile[6]} <br>SkillLevel: ${profile[7]} <br>PlayingStyle: ${profile[8]} <br>Team: ${profile[9]} <br>Date: ${profile[10]}`;
+        document.getElementById('eprofile').innerHTML = `<br>Name: ${profile[0]}<br>Email: ${profile[1]}<br>Address: ${profile[2]}<br>PostalCode: ${profile[3]} <br>City: ${profile[4]} <br>Alias: ${profile[5]} <br>SkillLevel: ${profile[6]} <br>PlayingStyle: ${profile[7]} <br>Team: ${profile[8]} <br>Join team date: ${profile[9]}`;
     }
 }
 

@@ -39,17 +39,14 @@
 
     <label for="positionName">New PositionName:</label>
     <input id="positionName" placeholder="New position name" />
-    <button id="updatePositionName">Update Position</button>
-
-    <div id="updatePositionNameResult"></div>
 
     <br>
 
     <label for="salary">New Salary:</label>
     <input type="number" id="salary" placeholder="New salary (integer only)" />
-    <button id="updateSalary">Update Salary</button>
+    <button id="updatePositionSalary">Update</button>
 
-    <div id="updateSalaryResult"></div>
+    <div id="updatePositionSalaryResult"></div>
 
     <br>
     
@@ -69,8 +66,37 @@
     <br><hr><br> <!-- ========================================================================= -->
 
     <h2> Manage Puzzle and Prop </h2>
-    <button id="ManagePuzzle">Manage Puzzle</button>
-    <button id="ManageProp">Manage Prop</button>
+    <a href="puzzle.html">
+        <button>Puzzles Page</button>
+    </a>
+
+    <a href="props.html">
+        <button>Props Page</button>
+    </a>
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Manage Scores </h2>
+    <a href="scores.html">
+        <button>Scores Page</button>
+    </a>
+    <br><hr><br> <!-- ========================================================================= -->
+
+    <h2> Manage Tables </h2>
+    <label for="tableName">Table name:</label>
+    <select id="tableName">
+    </select>
+
+    <br>
+
+    <div id="attributes"></div>
+
+    <br>
+    
+    <button id="selectAttributes">Get content</button>
+    <table id="tuples" border="1">
+    </table>
+
+
 
     <!-- External JavaScript file that contains the functionality/logic for the operations above. -->
     <script src="employeeScripts.js"></script>

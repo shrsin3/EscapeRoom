@@ -94,15 +94,47 @@ async function fetchPositionSalaryFromDb() {
     });
 }
 
+async function fetchPositionSalaryDropFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT Position FROM PositionSalary');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchPlayerProfileForViewerFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM PlayerPartOf');
+        result.rows.forEach(row => {
+            row[5] = row[5].toISOString().split('T')[0]
+        })
+
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchTeamProfileForViewerFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Team');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchViewerProfile(email) {
     return await withOracleDB(async (connection) => {
         console.log("viewerEmail: ", email)
         const result = await connection.execute(`
-        SELECT Users.*, Viewer.Age, PostalCity.City
-        FROM Users 
-        JOIN Viewer ON Users.Email = Viewer.Email
-        JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
-        WHERE Users.Email = :email
+            SELECT Users.Name, Users.Email, Users.Address, 
+                   Users.PostalCode, PostalCity.City, Viewer.Age
+            FROM Users 
+            JOIN Viewer ON Users.Email = Viewer.Email
+            JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
+            WHERE Users.Email = :email
         `, [email]);
         console.log(result.rows)
         return result.rows;
@@ -115,12 +147,13 @@ async function fetchEmployeeProfile(email) {
     return await withOracleDB(async (connection) => {
         console.log("viewerEmail: ", email)
         const result = await connection.execute(`
-        SELECT Users.*, Employee.Position, PositionSalary.Salary, PostalCity.City
-        FROM Users 
-        JOIN Employee ON Users.Email = Employee.Email
-        JOIN PositionSalary ON Employee.Position = PositionSalary.Position
-        JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
-        WHERE Users.Email = :email
+            SELECT Users.Name, Users.Email, Users.Address, 
+                   Users.PostalCode, PostalCity.City, Employee.Position, PositionSalary.Salary
+            FROM Users 
+            JOIN Employee ON Users.Email = Employee.Email
+            JOIN PositionSalary ON Employee.Position = PositionSalary.Position
+            JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
+            WHERE Users.Email = :email
         `, [email]);
         console.log(result.rows)
         return result.rows;
@@ -133,18 +166,56 @@ async function fetchPlayerProfile(email) {
     return await withOracleDB(async (connection) => {
         console.log("PlayerEmail: ", email)
         const result = await connection.execute(`
-        SELECT Users.*, PlayerPartOf.*, PostalCity.City
-        FROM Users 
-        JOIN PlayerPartOf ON Users.Email = PlayerPartOf.Email
-        JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
-        WHERE Users.Email = :email
+            SELECT Users.Name, Users.Email, Users.Address, Users.PostalCode, PostalCity.City, PlayerPartOf.Alias, 
+                   PlayerPartOf.SkillLevel, PlayerPartOf.PlayingStyle, PlayerPartOf.Name, PlayerPartOf.Since
+            FROM Users 
+            JOIN PlayerPartOf ON Users.Email = PlayerPartOf.Email
+            JOIN PostalCity ON Users.PostalCode = PostalCity.PostalCode
+            WHERE Users.Email = :email
         `, [email]);
-        result.rows[0][10] = result.rows[0][10].toISOString().split('T')[0]
+        result.rows[0][9] = result.rows[0][9].toISOString().split('T')[0]
         console.log(result.rows)
         return result.rows;
     }).catch(() => {
         return [];
     });
+}
+
+async function fetchAllTableNamesFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT table_name FROM user_tables');
+        console.log(result.rows);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchTableAttributesFromDb(tableName) {
+    return await withOracleDB(async (connection) => {
+        console.log("tableName: ", tableName)
+        const result = await connection.execute(`
+            SELECT column_name 
+            FROM user_tab_columns
+            WHERE table_name = :tableName
+        `, [tableName]);
+        console.log(result.rows);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchTableTuplesFromDb(tableName, attributes) {
+    return await withOracleDB(async (connection) => {
+        console.log("Attributes: ", attributes)
+        const query = `SELECT ${attributes} FROM ${tableName}`;
+        const result = await connection.execute(query);
+        console.log(result.rows);
+        return result.rows;
+    }).catch(() => {
+        return []
+    })
 }
 
 async function loginAsViewer(email, password) {
@@ -160,9 +231,13 @@ async function loginAsViewer(email, password) {
 
         const count = result.rows[0][0];
 
-        return count === 1;
+        if (count === 1) {
+            return {success: true}
+        } else {
+            return {success: false, message: 'Login failed, username or password incorrect'}
+        }
     }).catch(() => {
-        return false;
+        return {success: false, message: 'Login failed, interal error'};
     })
 }
 
@@ -179,9 +254,13 @@ async function loginAsEmployee(email, password) {
 
         const count = result.rows[0][0];
 
-        return count === 1;
+        if (count === 1) {
+            return {success: true}
+        } else {
+            return {success: false, message: 'Login failed, username or password incorrect'}
+        }
     }).catch(() => {
-        return false;
+        return {success: false, message: 'Login failed, interal error'};
     })
 }
 
@@ -198,49 +277,19 @@ async function loginAsPlayer(email, password) {
 
         const count = result.rows[0][0];
 
-        return count === 1;
-    }).catch(() => {
-        return false;
-    })
-}
-
-async function updateSalary(position, salary) {
-    return await withOracleDB(async (connection) => {
-        console.log('position, salary', position, salary)
-        const checkExisted = await connection.execute(`
-            SELECT COUNT(*)
-            FROM PositionSalary
-            WHERE Position = :position
-            `,
-            [position]
-        );
-        
-        if (checkExisted.rows[0][0] === 0) {
-            return {success: false, message: 'Position not found'}
-        }
-
-        const result = await connection.execute(`
-            UPDATE PositionSalary
-            SET Salary = :salary
-            WHERE Position = :position
-            `,
-            [salary, position],
-            { autoCommit: true }
-        );
-
-        if (result.rowsAffected && result.rowsAffected > 0) {
+        if (count === 1) {
             return {success: true}
         } else {
-            return {success: false, message: 'Error updating salary'}
+            return {success: false, message: 'Login failed, username or password incorrect'}
         }
     }).catch(() => {
-        return false;
+        return {success: false, message: 'Login failed, interal error'};
     })
 }
 
-async function updatePositionName(position, positionName) {
+async function updatePositionSalary(position, salary, positionName) {
     return await withOracleDB(async (connection) => {
-        console.log('position, name', position, positionName)
+        console.log('position, salary, position name', position, salary, positionName)
         const checkExisted = await connection.execute(`
             SELECT COUNT(*)
             FROM PositionSalary
@@ -268,20 +317,20 @@ async function updatePositionName(position, positionName) {
 
         const result = await connection.execute(`
             UPDATE PositionSalary
-            SET PositionName = :positionName
+            SET Salary = :salary, PositionName = :positionName
             WHERE Position = :position
             `,
-            [positionName, position],
+            [salary, positionName, position],
             { autoCommit: true }
         );
 
         if (result.rowsAffected && result.rowsAffected > 0) {
             return {success: true}
         } else {
-            return {success: false, message: 'Error updating positionName'}
+            return {success: false, message: 'Error updating'}
         }
     }).catch(() => {
-        return false;
+        return {success: false, message: 'Error updating'};
     })
 }
 
@@ -415,14 +464,19 @@ module.exports = {
     withOracleDB,
     testOracleConnection,
     fetchPositionSalaryFromDb,
+    fetchPositionSalaryDropFromDb,
+    fetchPlayerProfileForViewerFromDb,
+    fetchTeamProfileForViewerFromDb,
     fetchViewerProfile,
     fetchEmployeeProfile,
     fetchPlayerProfile,
+    fetchAllTableNamesFromDb,
+    fetchTableAttributesFromDb,
+    fetchTableTuplesFromDb,
     loginAsViewer,
     loginAsEmployee,
     loginAsPlayer,
-    updateSalary,
-    updatePositionName,
+    updatePositionSalary,
     initialization,
     fetchUserstableFromDb
 };
