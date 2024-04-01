@@ -77,18 +77,18 @@ async function insertScores(event) {
     }
 }
 
-async function fetchAndDisplayGroupedScores() {
-    const filterValue = document.getElementById('filterValue').value;
-    console.log("Function called");
-    if(filterValue === "Minimum"){
-        await fetchAndDisplayTeamNMaxScores();
-    } else if(filterValue === "Maximum"){
-        await fetchAndDisplayTeamNMinScores();
-    } else {
-        await fetchAndDisplayTeamNAvgScores();
-    }
-
-}
+// async function fetchAndDisplayGroupedScores() {
+//     const filterValue = document.getElementById('filterValue').value;
+//     console.log("Function called");
+//     if(filterValue === "Minimum"){
+//         await fetchAndDisplayTeamNMaxScores();
+//     } else if(filterValue === "Maximum"){
+//         await fetchAndDisplayTeamNMinScores();
+//     } else {
+//         await fetchAndDisplayTeamNAvgScores();
+//     }
+//
+// }
 
 async function fetchAndDisplayTeamNMaxScores() {
     console.log("Max Function called");
@@ -172,7 +172,10 @@ window.onload = function() {
     checkDbConnection();
     fetchTableData()
     document.getElementById("insertScore").addEventListener("submit", insertScores);
-    document.getElementById("GroupedScores").addEventListener("submit", fetchAndDisplayGroupedScores);
+    document.getElementById("max").addEventListener("click", fetchAndDisplayTeamNMaxScores);
+    document.getElementById("min").addEventListener("click", fetchAndDisplayTeamNMinScores);
+    document.getElementById("avg").addEventListener("click", fetchAndDisplayTeamNAvgScores);
+
 }
 
 function fetchTableData() {
