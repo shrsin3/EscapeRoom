@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<h1>Reservation booking</h1>
+
+<button id="getEscapeRoomList"> Get Escape Rooms </button > <br>
+
+
+<h2>Add a new reservation</h2>
+<form id="reserve">
+    <select name="roomReserve" id="roomReserve"></select>
+    Time to book: <input type="date" id="bookingTime" placeholder="Booking time"> <br><br>
+    Team name: <input type="text" id="teamName" placeholder="Enter the team name"> <br><br>
+    Booking email: <input type="text" id="bookingEmail" placeholder="Enter your email"> <br><br>
+
+    <button type="submit"> insert </button> <br>
+</form>
+<div id="addReservationResultMsg"></div>
+
+<h2>Show Reservation List</h2>
+<table id="reservationList" border="1">
+    <thead>
+    <tr>
+        <th>Booking ID</th>
+        <th>Time</th>
+        <th>Email</th>
+        <th>Team</th>
+        <th>Room</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script src="ReservationBooking.js"></script>
+
+</body>
+</html>

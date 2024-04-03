@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Escape rooms</title>
+</head>
+
+<body>
+<button id="resetAllTable"> Reset </button> <br>
+<div id="resetResultMsg"></div>
+
+<h2>Add Escape Room</h2>
+<form id="addEscapeRoom">
+    Name: <input type="text" id="roomName" placeholder="Enter name" required> <br><br>
+
+    <p>Genre: </p>
+    <select name="roomGenre" id="roomGenre">
+        <option value="Horror">Horror</option>
+        <option value="Classic">Classic</option>
+        <option value="Role-play">Role-play</option>
+    </select>
+
+    Timelimit (in min): <input type="number" id="timeLimit" placeholder="Time limit" maxlength="20"> <br><br>
+
+    <button type="submit"> insert </button> <br>
+</form>
+<div id="addRoomResultMsg"></div>
+
+<h2>Show Escape Room</h2>
+<table id="escapeRoomTable" border="1">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Genre</th>
+        <th>Time limit</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+
+<script src="EscapeRooms.js"></script>
+</body>
+</html>
+
+
