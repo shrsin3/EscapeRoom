@@ -3,6 +3,7 @@ const appService = require('./appService');
 const scoreService = require('./scoreService');
 const propService = require('./propService');
 const puzzleService = require('./puzzleService');
+const escapeRoomService = require('./escapeRoomService');
 
 const router = express.Router();
 
@@ -245,6 +246,11 @@ router.get('/teamNMinScore', async (req, res) => {
 
 router.get('/teamNAvgScore', async (req, res) => {
     const tableContent = await scoreService.fetchTeamNAvgScoreTableFromDb();
+    res.json({data: tableContent});
+});
+
+router.get('/teamNameDivisionQuery', async (req, res) => {
+    const tableContent = await scoreService.fetchTeamNamesDivisionQuery();
     res.json({data: tableContent});
 });
 

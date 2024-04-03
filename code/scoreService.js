@@ -54,10 +54,23 @@ async function fetchTeamNAvgScoreTableFromDb() {
     });
 }
 
+async function fetchTeamNamesDivisionQuery() {
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT Team.Name FROM Team
+                                                 WHERE NOT EXISTS((SELECT EscapeRoom.Name FROM EscapeRoom)
+                                                     MINUS(SELECT BookingMakesFor.RoomName FROM BookingMakesFor
+                                                     WHERE BookingMakesFor.TeamName = Team.Name))`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     insertScore,
     fetchScoreTableFromDb,
     fetchTeamNMinScoreTableFromDb,
     fetchTeamNMaxScoreTableFromDb,
-    fetchTeamNAvgScoreTableFromDb
+    fetchTeamNAvgScoreTableFromDb,
+    fetchTeamNamesDivisionQuery
 }
