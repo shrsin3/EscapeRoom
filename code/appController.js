@@ -3,6 +3,7 @@ const appService = require('./appService');
 const scoreService = require('./scoreService');
 const propService = require('./propService');
 const puzzleService = require('./puzzleService');
+const escapeRoomService = require('./escapeRoomService')
 
 const router = express.Router();
 
@@ -248,5 +249,79 @@ router.get('/teamNAvgScore', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/escapeRoomTable', async (req, res) => {
+    const tableContent = await escapeRoomService.fetchEscapeRoomTable();
+    res.json({data: tableContent});
+});
+
+
+router.post('/insert-escapeRoom', async (req, res) => {
+    const { name, genre, timeLimit } = req.body;
+    const insertResult = await escapeRoomService.insertNewEscapeRoom(name, genre, timeLimit);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/escapeRoomList', async (req, res) => {
+    const tableContent = await escapeRoomService.fetchEscapeRoomList();
+    res.json({data: tableContent});
+});
+
+router.get('/highRatingList', async (req, res) => {
+    const score = req.query.score;
+    const tableContent = await escapeRoomService.fetchHighRatingList(score);
+    console.log('controller: ', tableContent)
+    res.json({data: tableContent});
+});
+
+router.post('/insert-rating', async (req, res) => {
+    const { ID, RoomName, Score, RateComment} = req.body;
+    const insertResult = await escapeRoomService.insertNewComment(ID, RoomName, Score, RateComment);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/ratingList', async (req, res) => {
+    const tableContent = await escapeRoomService.fetchRatingList();
+    res.json({data: tableContent});
+});
+
+router.post('/insert-reservation', async (req, res) => {
+    const { id, date, email, team, room } = req.body;
+
+    const insertResult = await escapeRoomService.insertReservation(id, date, email, team, room);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.post('/reset-escape-room', async (req, res) => {
+    const initiateResult = await escapeRoomService.resetEscapeRoom();
+    if (initiateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
+router.get('/display-all-bookings', async (req, res) => {
+    const tableContent = await escapeRoomService.fetchReservationList();
+    res.json({data: tableContent});
+});
+
+
+router.get('/display-all-bookings-by-day', async (req, res) => {
+    const email = req.query.email;
+    const tableContent = await appService.fetchReservationByDay(Email, DaySearch);
+    res.json({data: tableContent});
+})
 
 module.exports = router;

@@ -22,8 +22,10 @@ async function insertBooking(event){
     const thisRoomReserve = document.getElementById('roomReserve').value;
     const thisBookingTime = document.getElementById('bookingTime').value;
     const thisTeamName = document.getElementById('teamName').value;
-    const thisEmail = document.getElementById('bookingEmail').value;
+   // const thisEmail = document.getElementById('bookingEmail').value;
     const thisID = Math.floor(Math.random() * (99999-10000) + 10000);
+    const email = sessionStorage.getItem('Email');
+  //  console.log("Email frontend ", email);
 
     const now = new Date();
     const messageElement = document.getElementById('addReservationResultMsg');
@@ -41,7 +43,7 @@ async function insertBooking(event){
         body: JSON.stringify({
             id: thisID,
             date: thisBookingTime,
-            email: thisEmail,
+            email: email,
             team: thisTeamName,
             room: thisRoomReserve
         })
@@ -51,7 +53,7 @@ async function insertBooking(event){
 
     if (responseData.success) {
         messageElement.textContent = "Reservation added successfully!";
-        DisplayAllBookings(); 
+        DisplayAllBookings();
     } else {
         messageElement.textContent = "Error detected";
     }
