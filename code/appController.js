@@ -329,4 +329,10 @@ router.get('/display-all-bookings-by-day', async (req, res) => {
     res.json({data: tableContent});
 })
 
+router.get('/teamLeaders', async (req, res) => {
+    const tableContent = await scoreService.fetchLeadingTeamNames();
+    res.json({data: tableContent});
+});
+
+
 module.exports = router;

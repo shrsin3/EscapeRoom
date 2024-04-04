@@ -65,6 +65,22 @@ async function fetchTeamNamesDivisionQuery() {
         return [];
     });
 }
+// Find the teams with leading scores
+async function fetchLeadingTeamNames() {
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT s.TeamName FROM ScoreOnPuzzle s
+                                                 GROUP BY s.TeamName
+                                                 HAVING AVG(s.Points) >= ALL(SELECT AVG(s1.Points) FROM ScoreOnPuzzle s1
+                                                                            GROUP BY s1.TeamName
+                                                                             HAVING COUNT(*) >= 2) AND 
+                                                s.TeamName IN (SELECT s2.TeamName FROM ScoreOnPuzzle s2
+                                                               GROUP BY s2.TeamName
+                                                               HAVING COUNT(*) >= 2)`);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
 
 module.exports = {
     insertScore,
@@ -72,5 +88,6 @@ module.exports = {
     fetchTeamNMinScoreTableFromDb,
     fetchTeamNMaxScoreTableFromDb,
     fetchTeamNAvgScoreTableFromDb,
-    fetchTeamNamesDivisionQuery
+    fetchTeamNamesDivisionQuery,
+    fetchLeadingTeamNames
 }

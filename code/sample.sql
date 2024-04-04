@@ -100,6 +100,7 @@ INSERT INTO Team VALUES ('The Rebels', 5);
 INSERT INTO Team VALUES ('T369', 5);
 INSERT INTO Team VALUES ('Dragon Slayers', 7);
 INSERT INTO Team VALUES ('Let us cook', 4);
+INSERT INTO Team VALUES ('The Young Blood', 2);
 
 INSERT INTO PuzzleHas VALUES (1, 'Room lock', 'Marys Wonderland');
 INSERT INTO PuzzleHas VALUES (2, 'Shelf lock', 'Fifteen reasons Vincent lied');
@@ -120,6 +121,7 @@ INSERT INTO ScoreOnPuzzle VALUES ('Dragon Slayers', 99, 2);
 INSERT INTO ScoreOnPuzzle VALUES ('Dragon Slayers', 90, 3);
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 22, 7);
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 45, 4);
+INSERT INTO ScoreOnPuzzle VALUES ('The Young Blood', 100, 4);
 
 
 
