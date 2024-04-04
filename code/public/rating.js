@@ -54,6 +54,7 @@ async function insertRating(event){
 
 //
 async function displayPastRating(){
+
     const tableElement = document.getElementById('ratingList');
     const tableBody = tableElement.querySelector('tbody');
 
@@ -67,7 +68,35 @@ async function displayPastRating(){
     if (tableBody) {
         tableBody.innerHTML = '';
     }
+    escapeRoomContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
 
+
+async function escapeRoomRatingGreatherThan(event){
+    event.preventDefault();
+    const scoreAbove = document.getElementById('roomRating').value;
+
+    const tableElement = document.getElementById('highRatingList');
+    const tableBody = tableElement.querySelector('tbody');
+    console.log("frontend: ");
+
+    const response = await fetch(`/highRatingList?score=${encodeURIComponent(scoreAbove)}`,{
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const escapeRoomContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+    console.log("frontend: ");
     escapeRoomContent.forEach(user => {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
@@ -79,38 +108,10 @@ async function displayPastRating(){
 
 
 //
-//
-// async function changeARating(thisRoomSelect, thisRateScore, thisRatingComment){
-//
-//     const response = await fetch('/change-rating', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             roomSelect: thisRoomSelect,
-//             rateScore: thisRateScore,
-//             ratingComment: thisRatingComment
-//         })
-//     });
-//
-//     const responseData = await response.json();
-//     const messageElement = document.getElementById('insertResultMsg');
-//
-//     if (responseData.success) {
-//         messageElement.textContent = "Rating changed successfully!";
-//         fetchTableData();
-//         return 1;
-//     } else {
-//         messageElement.textContent = "Error updating name!";
-//         return 0;
-//     }
-// }
-//
-//
 window.onload = function() {
     displayPastRating();
     document.getElementById("getEscapeRoomList").addEventListener("click",displayAddedEscapeRoom);
     document.getElementById("rating").addEventListener("submit", insertRating);
+    document.getElementById("highRating").addEventListener("submit", escapeRoomRatingGreatherThan);
  };
 

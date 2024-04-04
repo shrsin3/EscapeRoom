@@ -16,14 +16,42 @@
     <select name="roomReserve" id="roomReserve"></select>
     Time to book: <input type="date" id="bookingTime" placeholder="Booking time"> <br><br>
     Team name: <input type="text" id="teamName" placeholder="Enter the team name"> <br><br>
-    Booking email: <input type="text" id="bookingEmail" placeholder="Enter your email"> <br><br>
-
     <button type="submit"> insert </button> <br>
 </form>
 <div id="addReservationResultMsg"></div>
 
 <h2>Show Reservation List</h2>
 <table id="reservationList" border="1">
+    <thead>
+    <tr>
+        <th>Booking ID</th>
+        <th>Time</th>
+        <th>Email</th>
+        <th>Team</th>
+        <th>Room</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h2>Show All My Bookings on one Room</h2>
+<table id="reservationSearchByRoom" border="1">
+    <thead>
+    <tr>
+        <th>Booking ID</th>
+        <th>Time</th>
+        <th>Email</th>
+        <th>Team</th>
+        <th>Room</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<h2>Show All My Bookings on one Day</h2>
+<table id="reservationSearchByDay" border="1">
     <thead>
     <tr>
         <th>Booking ID</th>

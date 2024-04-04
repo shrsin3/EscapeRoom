@@ -75,29 +75,29 @@ async function resetAllTables() {
     }
 }
 
-// async function displayHighRatingRoom(){
-//     const tableElement = document.getElementById('highRatingRoom');
-//     const tableBody = tableElement.querySelector('tbody');
-//
-//     const response = await fetch('/highRatingList', {
-//         method: 'GET'
-//     });
-//
-//     const responseData = await response.json();
-//     const escapeRoomContent = responseData.data;
-//
-//     if (tableBody) {
-//         tableBody.innerHTML = '';
-//     }
-//
-//     escapeRoomContent.forEach(user => {
-//         const row = tableBody.insertRow();
-//         user.forEach((field, index) => {
-//             const cell = row.insertCell(index);
-//             cell.textContent = field;
-//         });
-//     });
-// }
+async function displayHighRatingRoom(){
+    const tableElement = document.getElementById('highRatingRoom');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/highRatingList', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const escapeRoomContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    escapeRoomContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
 
 window.onload = function() {
     fetchRoomTableData();

@@ -62,5 +62,4 @@ async function fetchEmployeeProfile() {
 window.onload = function() {
     checkDbConnection();
     document.getElementById('PlayerProfile').addEventListener('click', fetchEmployeeProfile);
-    // document.getElementById('BookRoom').addEventListener('click', );
 };

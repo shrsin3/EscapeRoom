@@ -32,13 +32,14 @@ async function insertNewEscapeRoom(name, genre, timeLimit) {
 }
 
 
-async function fetchHighRatingList(){
+async function fetchHighRatingList(scoreGreater){
     return await appService.withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT DINSTINCT e.name, r.score ' +
-            '                                   FROM EscapeRoom e, Rating r ' +
-            '                                   WHERE e.name = r.room' +
-            '                                   GROUP BY e.name' +
-            '                                   HAVING AVG(r.score) >= 4');
+        const result = await connection.execute(`SELECT DISTINCT RoomName, AVG(Score)
+                                                FROM RatingGivenToAssigns
+                                                GROUP BY RoomName
+                                                HAVING AVG(Score) >= :scoreGreater`, [scoreGreater]
+                                    );
+        console.log("service:", result.rows)
         return result.rows;
     }).catch(() => {
         return [];
@@ -69,7 +70,6 @@ async function fetchRatingList(){
 }
 
 async function insertReservation(ID, DateAdded, UserEmail, TeamName, RoomName){
-    console.log(DateAdded);
     return await appService.withOracleDB(async (connection) => {
         const result = await connection.execute(
             `INSERT INTO BookingMakesFor (BookingID, DateBookingAdded, UserEmail, TeamName, RoomName) VALUES (:BookingID, TO_DATE(:DateBookingAdded,'YYYY-MM-DD'), :UserEmail, :TeamName, :RoomName)`,
@@ -145,7 +145,19 @@ async function initiateAllTables(){
 async function fetchReservationList(){
     return await appService.withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM BookingMakesFor');
+        console.log(result.rows);
         return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchReservationByDay(){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT * FROM BookingMakesFor WHERE UserEmail = :Email AND DateBookingAdded = TO_DATE(:DaySearch,'YYYY-MM-DD')`,
+            [Email, DaySearch]);
+            return result.rows;
     }).catch(() => {
         return [];
     });
@@ -160,5 +172,6 @@ module.exports = {
     fetchHighRatingList,
     fetchEscapeRoomList,
     fetchReservationList,
-    initiateAllTables
+    initiateAllTables,
+    fetchReservationByDay
 };
