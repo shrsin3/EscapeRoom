@@ -3,6 +3,7 @@ DROP TABLE Fix;
 DROP TABLE PropHave;
 DROP TABLE Adjust;
 DROP Table PuzzleHas;
+DROP TABLE BookingMakesFor;
 DROP TABLE EscapeRoom;
 DROP TABLE Team;
 DROP TABLE PuzzleDifficulty;
