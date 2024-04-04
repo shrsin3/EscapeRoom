@@ -9,15 +9,21 @@
 
 <div id="testResultMsg"></div>
 
-<button id="getEscapeRoomList"> Get Escape Rooms </button > <br>
+<table id="roomList" border="1">
+    <thead>
+    <tr>
+        <th>Rooms</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
 
 <h2>Rate a room</h2>
 <form id="rating">
     <label for="roomSelect">Choose a room: </label>
-
-    <select id="roomSelect">
-    </select>
+    <input id="roomSelect" placeholder="Choose a room" />
 
     <p>Your rating: </p>
     <select id="rateScore">
@@ -29,7 +35,7 @@
     </select>
 
     <p>Comments: </p>
-    <input type="text" id="ratingComment" placeholder="Please type in your comments"> <br><br>
+    <input type="text" id="ratingComment" placeholder="Type in your comments"> <br><br>
     
     <button type="submit"> insert </button> <br>
 
@@ -51,7 +57,7 @@
     </tbody>
 </table>
 
-<h2>Escape Room with High Avg Ratings</h2>
+<h2>Escape Room with High Average Ratings</h2>
 <p>Select all rooms with rating greater than: </p>
 
 <form id = "highRating">
@@ -76,6 +82,8 @@
     <tbody>
     </tbody>
 </table>
+
+
 
 <script src="rating.js"></script>
 

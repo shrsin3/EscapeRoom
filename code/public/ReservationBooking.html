@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Reservation</title>
 </head>
 
 <body>
@@ -15,7 +15,6 @@
 <form id="reserve">
     <select name="roomReserve" id="roomReserve"></select>
     Time to book: <input type="date" id="bookingTime" placeholder="Booking time"> <br><br>
-    Team name: <input type="text" id="teamName" placeholder="Enter the team name"> <br><br>
     <button type="submit"> insert </button> <br>
 </form>
 <div id="addReservationResultMsg"></div>
@@ -35,23 +34,24 @@
     </tbody>
 </table>
 
-<h2>Show All My Bookings on one Room</h2>
-<table id="reservationSearchByRoom" border="1">
-    <thead>
-    <tr>
-        <th>Booking ID</th>
-        <th>Time</th>
-        <th>Email</th>
-        <th>Team</th>
-        <th>Room</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
 
-<h2>Show All My Bookings on one Day</h2>
-<table id="reservationSearchByDay" border="1">
+<h2>Find my previous bookings</h2>
+<form id="querySelection">
+    <input type="radio" id="yesDate" name="fav_language" value="with_date">
+    <label for="yesDate">Input includes date</label><br>
+    <input type="radio" id="noDate" name="fav_language" value="without_date">
+    <label for="noDate">Treat date as empty</label><br>
+Time: <input type="date" id="bookingTimeQuery" placeholder="Please type in the time you look for"> <br><br>
+<select id="andOr">
+    <option value="andQuery">AND</option>
+    <option value="orQuery">OR</option>
+</select>
+Room: <input type="text" id="bookingRoomQuery" placeholder="Please type in the escape room you look for"> <br><br>
+    <button type="submit"> Make Query </button> <br>
+</form>
+
+<h2>Show All My Bookings selected by given conditions</h2>
+<table id="reservationQueryList" border="1">
     <thead>
     <tr>
         <th>Booking ID</th>

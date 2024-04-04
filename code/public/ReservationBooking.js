@@ -21,11 +21,9 @@ async function insertBooking(event){
     event.preventDefault();
     const thisRoomReserve = document.getElementById('roomReserve').value;
     const thisBookingTime = document.getElementById('bookingTime').value;
-    const thisTeamName = document.getElementById('teamName').value;
-   // const thisEmail = document.getElementById('bookingEmail').value;
     const thisID = Math.floor(Math.random() * (99999-10000) + 10000);
     const email = sessionStorage.getItem('Email');
-  //  console.log("Email frontend ", email);
+  //  const teamName = sessionStorage.getItem('')
 
     const now = new Date();
     const messageElement = document.getElementById('addReservationResultMsg');
@@ -44,7 +42,6 @@ async function insertBooking(event){
             id: thisID,
             date: thisBookingTime,
             email: email,
-            team: thisTeamName,
             room: thisRoomReserve
         })
     });
@@ -84,10 +81,42 @@ async function DisplayAllBookings(){
     });
 }
 
+async function SelectionQuery(event){
+    event.preventDefault();
+    const withDate = document.getElementById('yesDate').checked;
+    const bookingTime = document.getElementById('bookingTimeQuery').value;
+    const bookingRoom = document.getElementById('bookingRoomQuery').value;
+    const userEmail = sessionStorage.getItem('Email');
+    const signForQuery = document.getElementById('andOr').value;
+
+    const tableElement = document.getElementById('reservationQueryList');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch(`/display-all-matched-reservation?withDate=${encodeURIComponent(withDate)}&time=${encodeURIComponent(bookingTime)}&room=${encodeURIComponent(bookingRoom)}&sign=${encodeURIComponent(signForQuery)}&email=${encodeURIComponent(userEmail)}`, {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const escapeRoomContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    escapeRoomContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+
+}
 
 
 window.onload = function() {
     DisplayAllBookings();
     document.getElementById("getEscapeRoomList").addEventListener("click",displayAddedEscapeRoom);
     document.getElementById("reserve").addEventListener("submit", insertBooking);
+    document.getElementById("querySelection").addEventListener("submit", SelectionQuery);
 };
