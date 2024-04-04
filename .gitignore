@@ -5,11 +5,11 @@
 *.log
 
 # dotenv environment variable files
-*/.env
+code/.env
 
 # IDEs and editors
-*/.vscode/
-*/.idea/
+.vscode/
+.idea/
 
 # Mac files
 .DS_Store
