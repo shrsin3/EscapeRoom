@@ -61,7 +61,7 @@ async function insertNewRoom(event) {
 }
 
 async function resetAllTables() {
-    const response = await fetch('/reset-all-tables', {
+    const response = await fetch('/reset-escape-room', {
         method: 'POST'
     });
     const responseData = await response.json();

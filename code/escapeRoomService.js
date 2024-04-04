@@ -84,7 +84,7 @@ async function insertReservation(ID, DateAdded, UserEmail, TeamName, RoomName){
 }
 
 
-async function initiateAllTables(){
+async function resetEscapeRoom(){
     return await appService.withOracleDB(async (connection) => {
         try {
             await connection.execute(`DROP TABLE RatingGivenToAssigns CASCADE CONSTRAINTS`);
@@ -172,6 +172,6 @@ module.exports = {
     fetchHighRatingList,
     fetchEscapeRoomList,
     fetchReservationList,
-    initiateAllTables,
+    resetEscapeRoom,
     fetchReservationByDay
 };
