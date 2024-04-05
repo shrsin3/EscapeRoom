@@ -329,4 +329,18 @@ router.get('/display-all-matched-reservation', async (req, res) => {
     res.json({data: tableContent});
 })
 
+router.get('/check-reservation-id', async (req,res) => {
+    const id = req.query.id;
+    const tableContent = await escapeRoomService.checkReservationID(id);
+    res.json({data: tableContent});
+})
+
+
+router.get('/check-reservation-conflict', async (req,res) => {
+    const time = req.query.time;
+    const room = req.query.room;
+    const tableContent = await escapeRoomService.checkReservationConflict(time, room);
+    res.json({data: tableContent});
+})
+
 module.exports = router;

@@ -225,6 +225,28 @@ async function reservationSelection(time, room, sign, email, withDate){
 }
 
 
+async function checkReservationID(id){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE BookingID = :id`, [id]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function checkReservationConflict(time, room){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE DateBookingAdded = TO_DATE(:time,'YYYY-MM-DD') AND RoomName = :room`, [time, room]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 module.exports = {
     insertNewEscapeRoom,
     fetchEscapeRoomTable,
@@ -236,5 +258,7 @@ module.exports = {
     fetchReservationList,
     initiateAllTables,
     reservationSelection,
-    searchForTeam
+    searchForTeam,
+    checkReservationID,
+    checkReservationConflict
 };

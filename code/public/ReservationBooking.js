@@ -21,7 +21,7 @@ async function insertBooking(event){
     event.preventDefault();
     const thisRoomReserve = document.getElementById('roomReserve').value;
     const thisBookingTime = document.getElementById('bookingTime').value;
-    const thisID = Math.floor(Math.random() * (99999-10000) + 10000);
+    var thisID = Math.floor(Math.random() * (99999-10000) + 10000);
     const email = sessionStorage.getItem('Email');
   //  const teamName = sessionStorage.getItem('')
 
@@ -30,6 +30,27 @@ async function insertBooking(event){
 
     if(new Date(thisBookingTime) <= now){
         messageElement.textContent = "Can't select a day in the past."
+        return ;
+    }
+
+    while(1) {    //Check if the assigned ID is duplicated in a loop
+        const responseID = await fetch(`/check-reservation-id?id=${encodeURIComponent(thisID)}`, {
+            method: 'GET'
+        });
+         const responseIDData = await responseID.json();
+         const IDContent = responseIDData.data;
+        if(IDContent.length == 0) break;
+        thisID = Math.floor(Math.random() * (99999-10000) + 10000);
+    }
+
+    //Check whether there is already a session booked on the same day at the same room
+    const responseDate = await fetch(`/check-reservation-conflict?time=${encodeURIComponent(thisBookingTime)}&room=${encodeURIComponent(thisRoomReserve)}`, {
+        method: 'GET'
+    });
+    const responseDateData = await responseDate.json();
+    const DateContent = responseDateData.data;
+    if(DateContent.length > 0){
+        messageElement.textContent = "Conflicted with another existing reservation, please choose another day."
         return ;
     }
 
@@ -65,14 +86,18 @@ async function DisplayAllBookings(){
     });
 
     const responseData = await response.json();
-    const demotableContent = responseData.data;
+    var reservationContent = responseData.data;
+
+    for (let i = 0; i < reservationContent.length; i++) {
+        reservationContent[i][1] = reservationContent[i][1].substring(0,10);
+    }
 
     // Always clear old, already fetched data before new fetching process.
     if (tableBody) {
         tableBody.innerHTML = '';
     }
 
-    demotableContent.forEach(user => {
+    reservationContent.forEach(user => {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
             const cell = row.insertCell(index);
@@ -98,6 +123,10 @@ async function SelectionQuery(event){
 
     const responseData = await response.json();
     const escapeRoomContent = responseData.data;
+
+    for (let i = 0; i < escapeRoomContent.length; i++) {
+        escapeRoomContent[i][1] = escapeRoomContent[i][1].substring(0,10);
+    }
 
     if (tableBody) {
         tableBody.innerHTML = '';

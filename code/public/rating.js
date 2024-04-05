@@ -110,6 +110,7 @@ async function escapeRoomRatingGreatherThan(event){
 }
 
 
+
 //
 window.onload = function() {
     displayPastRating();
