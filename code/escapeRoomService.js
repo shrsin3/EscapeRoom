@@ -39,24 +39,39 @@ async function fetchHighRatingList(scoreGreater){
                                                 GROUP BY RoomName
                                                 HAVING AVG(Score) >= :scoreGreater`, [scoreGreater]
                                     );
-        console.log("service:", result.rows)
+    //    console.log("service:", result.rows)
         return result.rows;
     }).catch(() => {
         return [];
     });
 }
 
+
 async function insertNewComment(ID, RoomName, Score, RateComment){
-    console.log(RoomName);
     return await appService.withOracleDB(async (connection) => {
+        const checkRoomExist = await connection.execute(`
+                SELECT COUNT(*)
+                FROM EscapeRoom
+                WHERE Name = :RoomName
+            `, [RoomName]
+        )
+
+        if (checkRoomExist.rows[0][0] === 0) {
+            return {success: false, message: 'Room not found'}
+        }
+
         const result = await connection.execute(
             `INSERT INTO RatingGivenToAssigns (ID, RoomName, Score, RateComment) VALUES (:ID, :RoomName, :Score, :RateComment)`,
             [ID, RoomName, Score, RateComment],
             { autoCommit: true }
         );
-        return result.rowsAffected && result.rowsAffected > 0;
+        if(result.rowsAffected && result.rowsAffected > 0) {
+            return {success: true, message: ''}
+        } else {
+            return {success: false, message: 'Insert failed'}
+        }
     }).catch(() => {
-        return false;
+        return {success: false, message: 'Insert failed'}
     });
 }
 
@@ -76,13 +91,20 @@ async function insertReservation(ID, DateAdded, UserEmail, TeamName, RoomName){
             [ID, DateAdded, UserEmail, TeamName, RoomName],
             { autoCommit: true }
         );
-
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
         return false;
     });
 }
 
+async function searchForTeam(userEmail){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT NAME FROM PlayerPartOf WHERE Email = :userEmail`, [userEmail]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
 
 async function resetEscapeRoom(){
     return await appService.withOracleDB(async (connection) => {
@@ -145,19 +167,81 @@ async function resetEscapeRoom(){
 async function fetchReservationList(){
     return await appService.withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM BookingMakesFor');
-        console.log(result.rows);
         return result.rows;
     }).catch(() => {
         return [];
     });
 }
 
-async function fetchReservationByDay(){
-    return await appService.withOracleDB(async (connection) => {
-        const result = await connection.execute(
-            `SELECT * FROM BookingMakesFor WHERE UserEmail = :Email AND DateBookingAdded = TO_DATE(:DaySearch,'YYYY-MM-DD')`,
-            [Email, DaySearch]);
+async function reservationSelection(time, room, sign, email, withDate){
+    if(withDate === "true" && room.length > 0){
+        if(sign === "orQuery"){
+            return await appService.withOracleDB(async (connection) => {
+                const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE (DateBookingAdded = TO_DATE(:time,'YYYY-MM-DD') OR RoomName =:room) AND UserEmail =:email`, [time, room, email]);
+                return result.rows;
+            }).catch(() => {
+                return [];
+            });
+        }
+        else if(sign === "andQuery"){
+            return await appService.withOracleDB(async (connection) => {
+                const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE (DateBookingAdded = TO_DATE(:time,'YYYY-MM-DD') AND RoomName =:room) AND UserEmail =:email`, [time, room, email]);
+                return result.rows;
+            }).catch(() => {
+                return [];
+            });
+        }
+        else{
+            console.log('Error reading and/or');
+            return ;
+        }
+    }
+
+    if(withDate === "true" && room.length <= 0){
+        return await appService.withOracleDB(async (connection) => {
+            const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE (DateBookingAdded =TO_DATE(:time,'YYYY-MM-DD') AND UserEmail =:email)`, [time, email]);
             return result.rows;
+        }).catch(() => {
+            return [];
+        });
+    }
+
+    if(withDate === "false" && room.length > 0){
+        return await appService.withOracleDB(async (connection) => {
+            const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE (RoomName =:room AND UserEmail =:email)`, [room, email]);
+            return result.rows;
+        }).catch(() => {
+            return [];
+        });
+    }
+}
+
+
+async function checkReservationID(id){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE BookingID = :id`, [id]);
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function checkReservationConflict(time, room){
+    return await appService.withOracleDB(async (connection) => {
+        const result = await connection.execute(`SELECT * 
+                FROM BookingMakesFor 
+                WHERE DateBookingAdded = TO_DATE(:time,'YYYY-MM-DD') AND RoomName = :room`, [time, room]);
+        return result.rows;
     }).catch(() => {
         return [];
     });
@@ -173,5 +257,8 @@ module.exports = {
     fetchEscapeRoomList,
     fetchReservationList,
     resetEscapeRoom,
-    fetchReservationByDay
+    reservationSelection,
+    searchForTeam,
+    checkReservationID,
+    checkReservationConflict
 };

@@ -1,5 +1,6 @@
 async function displayAddedEscapeRoom(){
-    select = document.getElementById('roomSelect');
+    const tableElement = document.getElementById('roomList');
+    const tableBody = tableElement.querySelector('tbody');
 
     const response = await fetch('/escapeRoomList', {
         method: 'GET'
@@ -8,12 +9,15 @@ async function displayAddedEscapeRoom(){
     const responseData = await response.json();
     const escapeRoomContent = responseData.data;
 
-    const dropdown = document.getElementById('roomSelect');
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
     escapeRoomContent.forEach(user => {
-        var opt = document.createElement('option');
-        opt.value = user;
-        opt.textContent = user;
-        dropdown.appendChild(opt);
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
     });
 }
 
@@ -48,7 +52,7 @@ async function insertRating(event){
         messageElement.textContent = "Rating added successfully!";
         displayPastRating();
     } else {
-        messageElement.textContent = "Error detected";
+        messageElement.textContent = responseData.message;
     }
 }
 
@@ -84,7 +88,6 @@ async function escapeRoomRatingGreatherThan(event){
 
     const tableElement = document.getElementById('highRatingList');
     const tableBody = tableElement.querySelector('tbody');
-    console.log("frontend: ");
 
     const response = await fetch(`/highRatingList?score=${encodeURIComponent(scoreAbove)}`,{
         method: 'GET'
@@ -107,11 +110,12 @@ async function escapeRoomRatingGreatherThan(event){
 }
 
 
+
 //
 window.onload = function() {
     displayPastRating();
-    document.getElementById("getEscapeRoomList").addEventListener("click",displayAddedEscapeRoom);
+    displayAddedEscapeRoom();
     document.getElementById("rating").addEventListener("submit", insertRating);
     document.getElementById("highRating").addEventListener("submit", escapeRoomRatingGreatherThan);
- };
+  };
 

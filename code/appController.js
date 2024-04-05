@@ -285,10 +285,10 @@ router.get('/highRatingList', async (req, res) => {
 router.post('/insert-rating', async (req, res) => {
     const { ID, RoomName, Score, RateComment} = req.body;
     const insertResult = await escapeRoomService.insertNewComment(ID, RoomName, Score, RateComment);
-    if (insertResult) {
-        res.json({ success: true });
+    if (insertResult.success) {
+        res.json({ success: true, message: insertResult.message });
     } else {
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: insertResult.message });
     }
 });
 
@@ -298,9 +298,9 @@ router.get('/ratingList', async (req, res) => {
 });
 
 router.post('/insert-reservation', async (req, res) => {
-    const { id, date, email, team, room } = req.body;
-
-    const insertResult = await escapeRoomService.insertReservation(id, date, email, team, room);
+    const { id, date, email, room } = req.body;
+    const teamName = await escapeRoomService.searchForTeam(email);
+    const insertResult = await escapeRoomService.insertReservation(id, date, email, teamName[0][0], room);
     if (insertResult) {
         res.json({ success: true });
     } else {
@@ -323,9 +323,28 @@ router.get('/display-all-bookings', async (req, res) => {
 });
 
 
-router.get('/display-all-bookings-by-day', async (req, res) => {
+
+router.get('/display-all-matched-reservation', async (req, res) => {
+    const time = req.query.time;
+    const room = req.query.room;
+    const sign = req.query.sign;
     const email = req.query.email;
-    const tableContent = await appService.fetchReservationByDay(Email, DaySearch);
+    const withDate = req.query.withDate;
+    const tableContent = await escapeRoomService.reservationSelection(time, room, sign, email, withDate);
+    res.json({data: tableContent});
+})
+
+router.get('/check-reservation-id', async (req,res) => {
+    const id = req.query.id;
+    const tableContent = await escapeRoomService.checkReservationID(id);
+    res.json({data: tableContent});
+})
+
+
+router.get('/check-reservation-conflict', async (req,res) => {
+    const time = req.query.time;
+    const room = req.query.room;
+    const tableContent = await escapeRoomService.checkReservationConflict(time, room);
     res.json({data: tableContent});
 })
 
