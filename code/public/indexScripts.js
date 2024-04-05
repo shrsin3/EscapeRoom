@@ -36,31 +36,31 @@ async function checkDbConnection() {
     });
 }
 
-// Fetches data from the demotable and displays it.
-async function fetchAndDisplayUserstable() {
-    const tableElement = document.getElementById('Userstable');
-    const tableBody = tableElement.querySelector('tbody');
+// // Fetches data from the demotable and displays it.
+// async function fetchAndDisplayUserstable() {
+//     const tableElement = document.getElementById('Userstable');
+//     const tableBody = tableElement.querySelector('tbody');
 
-    const response = await fetch('/Userstable', {
-        method: 'GET'
-    });
+//     const response = await fetch('/Userstable', {
+//         method: 'GET'
+//     });
 
-    const responseData = await response.json();
-    const demotableContent = responseData.data;
+//     const responseData = await response.json();
+//     const demotableContent = responseData.data;
 
-    // Always clear old, already fetched data before new fetching process.
-    if (tableBody) {
-        tableBody.innerHTML = '';
-    }
+//     // Always clear old, already fetched data before new fetching process.
+//     if (tableBody) {
+//         tableBody.innerHTML = '';
+//     }
 
-    demotableContent.forEach(user => {
-        const row = tableBody.insertRow();
-        user.forEach((field, index) => {
-            const cell = row.insertCell(index);
-            cell.textContent = field;
-        });
-    });
-}
+//     demotableContent.forEach(user => {
+//         const row = tableBody.insertRow();
+//         user.forEach((field, index) => {
+//             const cell = row.insertCell(index);
+//             cell.textContent = field;
+//         });
+//     });
+// }
 
 async function fetchViewerProfile() {
     const email = sessionStorage.getItem('Email');
@@ -135,7 +135,7 @@ async function Reset() {
     if (responseData.success) {
         const messageElement = document.getElementById('resetResultMsgAll');
         messageElement.textContent = "initialization successfully!";
-        fetchTableData();
+        // fetchTableData();
     } else {
         alert("Error initiating table!");
     }
@@ -146,7 +146,7 @@ async function Reset() {
 // Add or remove event listeners based on the desired functionalities.
 window.onload = function() {
     checkDbConnection();
-    fetchTableData();
+    // fetchTableData();
     document.getElementById('loginAsViewer').addEventListener('click', () => Login('Viewer'));
     document.getElementById('loginAsEmployee').addEventListener('click', () => Login('Employee'));
     document.getElementById('loginAsPlayer').addEventListener('click', () => Login('Player'));
@@ -155,6 +155,6 @@ window.onload = function() {
 
 // General function to refresh the displayed table data. 
 // You can invoke this after any table-modifying operation to keep consistency.
-function fetchTableData() {
-    fetchAndDisplayUserstable();
-}
+// function fetchTableData() {
+//     fetchAndDisplayUserstable();
+// }

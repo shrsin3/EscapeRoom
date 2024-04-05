@@ -19,10 +19,10 @@ router.get('/check-db-connection', async (req, res) => {
     }
 });
 
-router.get('/Userstable', async (req, res) => {
-    const tableContent = await appService.fetchUserstableFromDb();
-    res.json({data: tableContent});
-});
+// router.get('/Userstable', async (req, res) => {
+//     const tableContent = await appService.fetchUserstableFromDb();
+//     res.json({data: tableContent});
+// });
 
 router.get('/PositionSalary', async (req, res) => {
     const tableContent = await appService.fetchPositionSalaryFromDb();

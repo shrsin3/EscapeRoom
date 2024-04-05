@@ -77,14 +77,14 @@ async function testOracleConnection() {
     });
 }
 
-async function fetchUserstableFromDb() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM Users');
-        return result.rows;
-    }).catch(() => {
-        return [];
-    });
-}
+// async function fetchUserstableFromDb() {
+//     return await withOracleDB(async (connection) => {
+//         const result = await connection.execute('SELECT * FROM Users');
+//         return result.rows;
+//     }).catch(() => {
+//         return [];
+//     });
+// }
 
 async function fetchPositionSalaryFromDb() {
     return await withOracleDB(async (connection) => {
@@ -222,7 +222,7 @@ async function fetchTableTuplesFromDb(tableName, attributes) {
 async function loginAsViewer(email, password) {
     return await withOracleDB(async (connection) => {
         console.log('email ', email)
-        console.log('password ', password)
+        // console.log('password ', password)
         const result = await connection.execute(`
             SELECT COUNT(*)
             FROM Users JOIN Viewer ON Users.Email = Viewer.Email
@@ -245,7 +245,7 @@ async function loginAsViewer(email, password) {
 async function loginAsEmployee(email, password) {
     return await withOracleDB(async (connection) => {
         console.log('email ', email)
-        console.log('password ', password)
+        // console.log('password ', password)
         const result = await connection.execute(`
             SELECT COUNT(*)
             FROM Users JOIN Employee ON Users.Email = Employee.Email
@@ -268,7 +268,7 @@ async function loginAsEmployee(email, password) {
 async function loginAsPlayer(email, password) {
     return await withOracleDB(async (connection) => {
         console.log('email ', email)
-        console.log('password ', password)
+        // console.log('password ', password)
         const result = await connection.execute(`
             SELECT COUNT(*)
             FROM Users JOIN PlayerPartOf ON Users.Email = PlayerPartOf.Email
@@ -376,6 +376,6 @@ module.exports = {
     loginAsEmployee,
     loginAsPlayer,
     updatePositionSalary,
-    initialization,
-    fetchUserstableFromDb
+    initialization
+    // fetchUserstableFromDb
 };
