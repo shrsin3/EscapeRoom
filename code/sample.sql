@@ -137,6 +137,12 @@ INSERT INTO PuzzleDifficulty VALUES ('Statue rotation', 5);
 INSERT INTO PuzzleDifficulty VALUES ('Treasure Puzzle', 2);
 INSERT INTO PuzzleDifficulty VALUES ('Guess the Word', 1);
 
+INSERT INTO PropHave VALUES (1, 'Lock', 'Intact', 1);
+INSERT INTO PropHave VALUES (2, 'Statue', 'Damaged', 4);
+INSERT INTO PropHave VALUES (3, 'Television Screen', 'Intact', 9);
+INSERT INTO PropHave VALUES (4, 'Books', 'Damaged', 2);
+INSERT INTO PropHave VALUES (5, 'Key', 'Intact', 6);
+
 INSERT INTO Users VALUES ('User1', 'user1@gmail.com', '1000 Bridgeport Rd', 'V6V A03', '123');
 INSERT INTO Users VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', '123');
 
