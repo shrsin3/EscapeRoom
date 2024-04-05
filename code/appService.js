@@ -1,4 +1,5 @@
 const oracledb = require('oracledb');
+const fs = require('fs');
 const loadEnvFile = require('./utils/envUtil');
 
 const envVariables = loadEnvFile('./.env');
@@ -336,121 +337,18 @@ async function updatePositionSalary(position, salary, positionName) {
 
 async function initialization() {
     return await withOracleDB(async (connection) => {
-        const tables = ['Users', 'PostalCity', 'Employee', 'PositionSalary', 'Viewer', 'PlayerPartOf', 'Team'];
-        for (const table of tables) {
+        const sql = fs.readFileSync("sample.sql", 'utf8');
+        const statements = sql.split(";").map(statement => statement.trim()).filter(statement => statement);
+        console.log(statements);
+
+        for (const statement of statements) {
+            console.log(statement)
             try {
-                await connection.execute(`DROP TABLE ${table} CASCADE CONSTRAINTS`);
-            } catch(err) {
-                console.log(`${table} might not exist, proceeding to create...`);
+                await connection.execute(statement)
+            } catch (err) {
+                console.error(err);
             }
         }
-
-        await connection.execute(`
-            CREATE TABLE Users (
-                Name VARCHAR2(100), 
-                Email VARCHAR2(100) PRIMARY KEY, 
-                Address VARCHAR2(100) NOT NULL, 
-                PostalCode VARCHAR2(100) NOT NULL,
-                PassWord VARCHAR2(100) NOT NULL,
-                UNIQUE(Address, PostalCode)
-            )       
-        `);
-        
-        await connection.execute(`
-            CREATE TABLE PostalCity (
-                PostalCode VARCHAR2(100) PRIMARY KEY, 
-                City VARCHAR2(100) NOT NULL
-            )            
-        `);
-
-        await connection.execute(`
-            CREATE TABLE Employee (
-                Email VARCHAR2(100) PRIMARY KEY, 
-                Position INTEGER NOT NULL,
-                FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
-            )            
-        `);
-
-        await connection.execute(`
-            CREATE TABLE PositionSalary (
-                Position INTEGER PRIMARY KEY,
-                PositionName VARCHAR2(100) NOT NULL UNIQUE,
-                Salary INTEGER NOT NULL
-            )            
-        `);
-
-        await connection.execute(`
-            CREATE TABLE Viewer (
-                Email VARCHAR2(100) PRIMARY KEY, 
-                Age INTEGER NOT NULL,
-                FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
-            )           
-        `);
-
-        await connection.execute(`
-            CREATE TABLE Team (
-                Name VARCHAR2(100) PRIMARY KEY,
-                TeamCapacity INTEGER DEFAULT 10
-            )
-        `);
-        
-        await connection.execute(`
-            CREATE TABLE PlayerPartOf (
-                Email VARCHAR2(100) PRIMARY KEY, 
-                Alias VARCHAR2(100) NOT NULL UNIQUE,
-                SkillLevel INTEGER DEFAULT 1,
-                PlayingStyle VARCHAR2(100),
-                Name VARCHAR2(100) NOT NULL,
-                Since DATE,
-                FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE,
-                FOREIGN KEY (Name) REFERENCES Team(Name)
-            )
-        `);
-
-        // Insert data
-        await connection.execute(`
-            INSERT INTO Users (Name, Email, Address, PostalCode, PassWord) VALUES ('User1', 'user1@gmail.com', '1000 Bridgeport Rd', 'V6V A03', '123')
-        `);
-
-        await connection.execute(`
-        INSERT INTO Users (Name, Email, Address, PostalCode, PassWord) VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', '123')
-        `);
-
-        await connection.execute(`
-            INSERT INTO PostalCity (PostalCode, City) VALUES ('V6V A03', 'Vancouver')
-        `);
-
-        await connection.execute(`
-            INSERT INTO PostalCity (PostalCode, City) VALUES ('F8S 4G3', 'Calgary')
-        `);
-
-        await connection.execute(`
-            INSERT INTO Employee (Email, Position) VALUES ('user1@gmail.com', 1)
-        `);
-
-        await connection.execute(`
-            INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (1, 'Manager', 70000)
-        `);
-
-        await connection.execute(`
-            INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (2, 'Front-desk', 50000)
-        `);
-
-        await connection.execute(`
-            INSERT INTO Viewer (Email, Age) VALUES ('user1@gmail.com', 25)
-        `);
-
-        await connection.execute(`
-            INSERT INTO Viewer (Email, Age) VALUES ('user2@gmail.com', 33)
-        `);
-
-        await connection.execute(`
-            INSERT INTO Team (Name, TeamCapacity) VALUES ('Item Finder', 6)
-        `)
-
-        await connection.execute(`
-            INSERT INTO PlayerPartOf (Email, Alias, SkillLevel, PlayingStyle, Name, Since) VALUES ('user1@gmail.com', 'U1', 5, 'Fast', 'Item Finder', TO_DATE('2022-09-03', 'yyyy/mm/dd'))
-        `)
 
         await connection.commit();
 
