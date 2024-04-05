@@ -13,6 +13,7 @@ DROP TABLE Employee CASCADE CONSTRAINTS;
 DROP TABLE Viewer CASCADE CONSTRAINTS;
 DROP TABLE PostalCity CASCADE CONSTRAINTS;
 DROP TABLE PositionSalary CASCADE CONSTRAINTS;
+DROP TABLE RatingGivenToAssigns CASCADE CONSTRAINTS;
 CREATE TABLE EscapeRoom (
                             Name varchar2(100),
                             Genre varchar2(100),
@@ -94,14 +95,14 @@ CREATE TABLE Fix(
                     PropID integer,
                     PRIMARY KEY (Email, PropID),
                     FOREIGN KEY (Email) REFERENCES Users(Email),
-                    FOREIGN KEY (PropID) REFERENCES PropHave(PropID)
+                    FOREIGN KEY (PropID) REFERENCES PropHave(PropID) ON DELETE CASCADE
 );
 CREATE TABLE Adjust(
                        Email varchar(50),
                        PuzzleID integer,
                        PRIMARY KEY (Email, PuzzleID),
                        FOREIGN KEY (Email) REFERENCES Users(Email),
-                       FOREIGN KEY (PuzzleID) REFERENCES PuzzleHas(PuzzleID)
+                       FOREIGN KEY (PuzzleID) REFERENCES PuzzleHas(PuzzleID) ON DELETE CASCADE
 );
 CREATE TABLE BookingMakesFor (
                                  BookingID integer PRIMARY KEY,
@@ -126,7 +127,7 @@ INSERT INTO EscapeRoom VALUES ('Leviathan', 'Classic', 120);
 INSERT INTO EscapeRoom VALUES ('Marys Wonderland', 'Classic', 120);
 INSERT INTO Team VALUES ('SEN', 6);
 INSERT INTO Team VALUES ('The Rebels', 5);
-INSERT INTO Team VALUES ('T369', 5);å
+INSERT INTO Team VALUES ('T369', 5);
 INSERT INTO Team VALUES ('Dragon Slayers', 7);
 INSERT INTO Team VALUES ('Let us cook', 4);
 INSERT INTO Team VALUES ('The Young Blood', 2);
@@ -222,15 +223,15 @@ INSERT INTO BookingMakesFor VALUES (292882, TO_DATE('2023-11-13', 'yyyy/mm/dd'),
 INSERT INTO BookingMakesFor VALUES (292885, TO_DATE('2023-11-04', 'yyyy/mm/dd'), 'user2@gmail.com', 'Dragon Slayers', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES (292888, TO_DATE('2023-11-08', 'yyyy/mm/dd'), 'user2@gmail.com', 'T369', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES (292899, TO_DATE('2023-11-04', 'yyyy/mm/dd'), 'user2@gmail.com', 'The Rebels', 'Leviathan');
-INSERT INTO RatingGivenToAssigns VALUES (11293, 'Marys Wonderland', 3, 'Average')
-INSERT INTO RatingGivenToAssigns VALUES (23463, 'The giggling', 5, 'Very good')
-INSERT INTO RatingGivenToAssigns VALUES (87635, 'Escape Arkaham', 5, 'Very good')
-INSERT INTO RatingGivenToAssigns VALUES (25775, 'Marys Wonderland', 5, 'Very good')
-INSERT INTO RatingGivenToAssigns VALUES (67853, 'The giggling', 4, 'Okay')
-INSERT INTO RatingGivenToAssigns VALUES (46875, 'Fifteen reasons Vincent lied', 2, 'The puzzle design is so bad. ')
-INSERT INTO RatingGivenToAssigns VALUES (94246, 'Escape Arkaham', 5, 'Good')
-INSERT INTO RatingGivenToAssigns VALUES (85345, 'Escape Arkaham', 1, 'Terrible')
-INSERT INTO RatingGivenToAssigns VALUES (36747, 'Marys Wonderland', 5, 'Good')
-INSERT INTO RatingGivenToAssigns VALUES (15654, 'Leviathan', 3, 'Barely worth my money. ')
-INSERT INTO RatingGivenToAssigns VALUES (84334, 'Leviathan', 5, 'Good')
-INSERT INTO RatingGivenToAssigns VALUES (57743, 'Marys Wonderland', 2, 'What is this')
+INSERT INTO RatingGivenToAssigns VALUES (11293, 'Marys Wonderland', 3, 'Average');
+INSERT INTO RatingGivenToAssigns VALUES (23463, 'The giggling', 5, 'Very good');
+INSERT INTO RatingGivenToAssigns VALUES (87635, 'Escape Arkaham', 5, 'Very good');
+INSERT INTO RatingGivenToAssigns VALUES (25775, 'Marys Wonderland', 5, 'Very good');
+INSERT INTO RatingGivenToAssigns VALUES (67853, 'The giggling', 4, 'Okay');
+INSERT INTO RatingGivenToAssigns VALUES (46875, 'Fifteen reasons Vincent lied', 2, 'The puzzle design is so bad. ');
+INSERT INTO RatingGivenToAssigns VALUES (94246, 'Escape Arkaham', 5, 'Good');
+INSERT INTO RatingGivenToAssigns VALUES (85345, 'Escape Arkaham', 1, 'Terrible');
+INSERT INTO RatingGivenToAssigns VALUES (36747, 'Marys Wonderland', 5, 'Good');
+INSERT INTO RatingGivenToAssigns VALUES (15654, 'Leviathan', 3, 'Barely worth my money. ');
+INSERT INTO RatingGivenToAssigns VALUES (84334, 'Leviathan', 5, 'Good');
+INSERT INTO RatingGivenToAssigns VALUES (57743, 'Marys Wonderland', 2, 'What is this');

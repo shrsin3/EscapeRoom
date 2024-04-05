@@ -122,6 +122,10 @@ async function SelectionQuery(event){
 
     const responseData = await response.json();
     const escapeRoomContent = responseData.data;
+    if (escapeRoomContent.length === 0) {
+        alert("Booking not find")
+        return;
+    }
 
     for (let i = 0; i < escapeRoomContent.length; i++) {
         escapeRoomContent[i][1] = escapeRoomContent[i][1].substring(0,10);
