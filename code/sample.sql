@@ -14,9 +14,9 @@ DROP TABLE Viewer CASCADE CONSTRAINTS;
 DROP TABLE PostalCity CASCADE CONSTRAINTS;
 DROP TABLE PositionSalary CASCADE CONSTRAINTS;
 CREATE TABLE EscapeRoom (
-                            Name varchar(50),
-                            Genre varchar(50),
-                            TimeLimit integer DEFAULT 60,
+                            Name varchar2(100),
+                            Genre varchar2(100),
+                            timeLimit integer DEFAULT 60,
                             PRIMARY KEY(Name)
 );
 CREATE TABLE Team (
@@ -61,33 +61,33 @@ CREATE TABLE Users (
                        UNIQUE(Address, PostalCode)
 );
 CREATE TABLE PostalCity (
-                        PostalCode VARCHAR2(100) PRIMARY KEY, 
-                        City VARCHAR2(100) NOT NULL
+                            PostalCode VARCHAR2(100) PRIMARY KEY,
+                            City VARCHAR2(100) NOT NULL
 );
 CREATE TABLE Employee (
-                        Email VARCHAR2(100) PRIMARY KEY, 
-                        Position INTEGER NOT NULL,
-                        FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
+                          Email VARCHAR2(100) PRIMARY KEY,
+                          Position INTEGER NOT NULL,
+                          FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
 );
 CREATE TABLE PositionSalary (
-                        Position INTEGER PRIMARY KEY,
-                        PositionName VARCHAR2(100) NOT NULL UNIQUE,
-                        Salary INTEGER NOT NULL
-);          
+                                Position INTEGER PRIMARY KEY,
+                                PositionName VARCHAR2(100) NOT NULL UNIQUE,
+                                Salary INTEGER NOT NULL
+);
 CREATE TABLE Viewer (
-                        Email VARCHAR2(100) PRIMARY KEY, 
+                        Email VARCHAR2(100) PRIMARY KEY,
                         Age INTEGER NOT NULL,
                         FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
 );
 CREATE TABLE PlayerPartOf (
-                        Email VARCHAR2(100) PRIMARY KEY, 
-                        Alias VARCHAR2(100) NOT NULL UNIQUE,
-                        SkillLevel INTEGER DEFAULT 1,
-                        PlayingStyle VARCHAR2(100),
-                        Name VARCHAR2(100) NOT NULL,
-                        Since DATE,
-                        FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE,
-                        FOREIGN KEY (Name) REFERENCES Team(Name)
+                              Email VARCHAR2(100) PRIMARY KEY,
+                              Alias VARCHAR2(100) NOT NULL UNIQUE,
+                              SkillLevel INTEGER DEFAULT 1,
+                              PlayingStyle VARCHAR2(100),
+                              Name VARCHAR2(100) NOT NULL,
+                              Since DATE,
+                              FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE,
+                              FOREIGN KEY (Name) REFERENCES Team(Name)
 );
 CREATE TABLE Fix(
                     Email varchar(50),
@@ -111,14 +111,22 @@ CREATE TABLE BookingMakesFor (
                                  RoomName varchar2(100) NOT NULL,
                                  FOREIGN KEY(RoomName) references EscapeRoom(Name)
 );
-INSERT INTO EscapeRoom VALUES ('The giggling', 'Horor', 75);
-INSERT INTO EscapeRoom VALUES ('Fifteen reasons Vincent lied', 'Role-playing', 75);
-INSERT INTO EscapeRoom VALUES ('Escape Arkaham', 'Horor', 60);
+CREATE TABLE RatingGivenToAssigns (
+                                      ID integer PRIMARY KEY,
+                                      RoomName varchar2(100) NOT NULL,
+                                      Score integer NOT NULL,
+                                      RateComment varchar2(1000),
+                                      FOREIGN KEY(RoomName) references EscapeRoom(Name)
+);
+
+INSERT INTO EscapeRoom VALUES ('The giggling', 'Horror', 75);
+INSERT INTO EscapeRoom VALUES ('Fifteen reasons Vincent lied', 'Role-play', 75);
+INSERT INTO EscapeRoom VALUES ('Escape Arkaham', 'Horror', 60);
 INSERT INTO EscapeRoom VALUES ('Leviathan', 'Classic', 120);
 INSERT INTO EscapeRoom VALUES ('Marys Wonderland', 'Classic', 120);
 INSERT INTO Team VALUES ('SEN', 6);
 INSERT INTO Team VALUES ('The Rebels', 5);
-INSERT INTO Team VALUES ('T369', 5);
+INSERT INTO Team VALUES ('T369', 5);å
 INSERT INTO Team VALUES ('Dragon Slayers', 7);
 INSERT INTO Team VALUES ('Let us cook', 4);
 INSERT INTO Team VALUES ('The Young Blood', 2);
@@ -194,6 +202,13 @@ INSERT INTO Adjust VALUES ('user4@gmail.com', 6);
 INSERT INTO Adjust VALUES ('user4@gmail.com', 7);
 INSERT INTO Adjust VALUES ('user4@gmail.com', 8);
 INSERT INTO Adjust VALUES ('user4@gmail.com', 9);
+INSERT INTO BookingMakesFor VALUES (34484, TO_DATE('2024-11-08','YYYY-MM-DD'), 'user1@gmail.com', 'T369', 'Marys Wonderland');
+INSERT INTO BookingMakesFor VALUES (29275, TO_DATE('2024-07-30','YYYY-MM-DD'), 'user2@gmail.com', 'SEN', 'The giggling');
+INSERT INTO BookingMakesFor VALUES (23876, TO_DATE('2024-10-25','YYYY-MM-DD'), 'user2@gmail.com', 'SEN', 'Fifteen reasons Vincent lied');
+INSERT INTO BookingMakesFor VALUES (65877, TO_DATE('2024-07-30','YYYY-MM-DD'), 'user2@gmail.com', 'SEN', 'Escape Arkaham');
+INSERT INTO BookingMakesFor VALUES (26278, TO_DATE('2024-05-11','YYYY-MM-DD'), 'user2@gmail.com', 'SEN', 'Leviathan');
+INSERT INTO BookingMakesFor VALUES (79487, TO_DATE('2024-09-23','YYYY-MM-DD'), 'user1@gmail.com', 'T369', 'Marys Wonderland');
+INSERT INTO BookingMakesFor VALUES (33880, TO_DATE('2024-06-08','YYYY-MM-DD'), 'user2@gmail.com', 'SEN', 'The giggling');
 INSERT INTO BookingMakesFor VALUES (292872, TO_DATE('2023-11-08', 'yyyy/mm/dd'), 'user1@gmail.com', 'SEN', 'Marys Wonderland');
 INSERT INTO BookingMakesFor VALUES (292875, TO_DATE('2023-11-09', 'yyyy/mm/dd'), 'user2@gmail.com', 'SEN', 'The giggling');
 INSERT INTO BookingMakesFor VALUES (292876, TO_DATE('2023-11-11', 'yyyy/mm/dd'), 'user2@gmail.com', 'SEN', 'Fifteen reasons Vincent lied');
@@ -207,3 +222,15 @@ INSERT INTO BookingMakesFor VALUES (292882, TO_DATE('2023-11-13', 'yyyy/mm/dd'),
 INSERT INTO BookingMakesFor VALUES (292885, TO_DATE('2023-11-04', 'yyyy/mm/dd'), 'user2@gmail.com', 'Dragon Slayers', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES (292888, TO_DATE('2023-11-08', 'yyyy/mm/dd'), 'user2@gmail.com', 'T369', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES (292899, TO_DATE('2023-11-04', 'yyyy/mm/dd'), 'user2@gmail.com', 'The Rebels', 'Leviathan');
+INSERT INTO RatingGivenToAssigns VALUES (11293, 'Marys Wonderland', 3, 'Average')
+INSERT INTO RatingGivenToAssigns VALUES (23463, 'The giggling', 5, 'Very good')
+INSERT INTO RatingGivenToAssigns VALUES (87635, 'Escape Arkaham', 5, 'Very good')
+INSERT INTO RatingGivenToAssigns VALUES (25775, 'Marys Wonderland', 5, 'Very good')
+INSERT INTO RatingGivenToAssigns VALUES (67853, 'The giggling', 4, 'Okay')
+INSERT INTO RatingGivenToAssigns VALUES (46875, 'Fifteen reasons Vincent lied', 2, 'The puzzle design is so bad. ')
+INSERT INTO RatingGivenToAssigns VALUES (94246, 'Escape Arkaham', 5, 'Good')
+INSERT INTO RatingGivenToAssigns VALUES (85345, 'Escape Arkaham', 1, 'Terrible')
+INSERT INTO RatingGivenToAssigns VALUES (36747, 'Marys Wonderland', 5, 'Good')
+INSERT INTO RatingGivenToAssigns VALUES (15654, 'Leviathan', 3, 'Barely worth my money. ')
+INSERT INTO RatingGivenToAssigns VALUES (84334, 'Leviathan', 5, 'Good')
+INSERT INTO RatingGivenToAssigns VALUES (57743, 'Marys Wonderland', 2, 'What is this')

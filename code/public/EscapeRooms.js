@@ -25,7 +25,6 @@ async function fetchAndDisplayEscapeRooms() {
 
 async function insertNewRoom(event) {
     event.preventDefault();
-
     const thisName = document.getElementById('roomName').value;
     const thieGenre = document.getElementById('roomGenre').value;
     const thisTimeLimit = document.getElementById('timeLimit').value;

@@ -260,5 +260,5 @@ module.exports = {
     reservationSelection,
     searchForTeam,
     checkReservationID,
-    checkReservationConflict
+    checkReservationConflict,
 };

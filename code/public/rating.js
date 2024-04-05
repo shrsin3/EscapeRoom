@@ -28,9 +28,17 @@ async function insertRating(event){
     const thisRateScore = document.getElementById('rateScore').value;
     const thisRatingComment = document.getElementById('ratingComment').value;
  //   const thisDate = newDate.TO_DATE('2003/05/03 21:02:44', 'Mon mmm dd yyyy hh24:mi:ss GMT-0700 (Pacific Daylight Saving Time)');
-    const thisID = Math.floor(Math.random() * (99999-10000) + 10000);
 
-    console.log(thisRoomSelect);
+    var thisID = Math.floor(Math.random() * (99999-10000) + 10000);
+    while(1) {    //Check if the assigned ID is duplicated in a loop
+        const responseID = await fetch(`/check-reservation-id?id=${encodeURIComponent(thisID)}`, {
+            method: 'GET'
+        });
+        const responseIDData = await responseID.json();
+        const IDContent = responseIDData.data;
+        if(IDContent.length == 0) break;
+        thisID = Math.floor(Math.random() * (99999-10000) + 10000);
+    }
 
     const response = await fetch('/insert-rating', {
         method: 'POST',

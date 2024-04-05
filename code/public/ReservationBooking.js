@@ -23,7 +23,6 @@ async function insertBooking(event){
     const thisBookingTime = document.getElementById('bookingTime').value;
     var thisID = Math.floor(Math.random() * (99999-10000) + 10000);
     const email = sessionStorage.getItem('Email');
-  //  const teamName = sessionStorage.getItem('')
 
     const now = new Date();
     const messageElement = document.getElementById('addReservationResultMsg');
