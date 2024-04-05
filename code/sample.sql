@@ -101,6 +101,7 @@ INSERT INTO Team VALUES ('T369', 5);
 INSERT INTO Team VALUES ('Dragon Slayers', 7);
 INSERT INTO Team VALUES ('Let us cook', 4);
 INSERT INTO Team VALUES ('The Young Blood', 2);
+INSERT INTO Team VALUES ('The New Members', 2);
 
 INSERT INTO PuzzleHas VALUES (1, 'Room lock', 'Marys Wonderland');
 INSERT INTO PuzzleHas VALUES (2, 'Shelf lock', 'Fifteen reasons Vincent lied');
@@ -109,6 +110,9 @@ INSERT INTO PuzzleHas VALUES (4, 'Statue rotation', 'Escape Arkaham');
 INSERT INTO PuzzleHas VALUES (5, 'Room lock', 'Leviathan');
 INSERT INTO PuzzleHas VALUES (6, 'Room lock', 'The giggling');
 INSERT INTO PuzzleHas VALUES (7, 'Shelf lock', 'The giggling');
+INSERT INTO PuzzleHas VALUES (8, 'Treasure Puzzle', 'Escape Arkaham');
+INSERT INTO PuzzleHas VALUES (9, 'Guess the Word', 'Leviathan');
+
 
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 63, 2);
 INSERT INTO ScoreOnPuzzle VALUES ('T369', 73, 1);
@@ -122,12 +126,16 @@ INSERT INTO ScoreOnPuzzle VALUES ('Dragon Slayers', 90, 3);
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 22, 7);
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 45, 4);
 INSERT INTO ScoreOnPuzzle VALUES ('The Young Blood', 100, 4);
-
+INSERT INTO ScoreOnPuzzle VALUES ('The New Members', 99, 5);
+INSERT INTO ScoreOnPuzzle VALUES ('The New Members', 90, 6);
+INSERT INTO ScoreOnPuzzle VALUES ('The New Members', 100, 3);
 
 
 INSERT INTO PuzzleDifficulty VALUES ('Room lock', 4);
 INSERT INTO PuzzleDifficulty VALUES ('Shelf lock', 3);
 INSERT INTO PuzzleDifficulty VALUES ('Statue rotation', 5);
+INSERT INTO PuzzleDifficulty VALUES ('Treasure Puzzle', 2);
+INSERT INTO PuzzleDifficulty VALUES ('Guess the Word', 1);
 
 INSERT INTO Users VALUES ('User1', 'user1@gmail.com', '1000 Bridgeport Rd', 'V6V A03', '123');
 INSERT INTO Users VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', '123');
@@ -145,27 +153,6 @@ INSERT INTO BookingMakesFor VALUES ('292882', '2023-11-13', 'user2@gmail.com', '
 INSERT INTO BookingMakesFor VALUES ('292885', '2023-11-04', 'user2@gmail.com', 'Dragon Slayers', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES ('292888', '2023-11-08', 'user2@gmail.com', 'T369', 'Leviathan');
 INSERT INTO BookingMakesFor VALUES ('292899', '2023-11-04', 'user2@gmail.com', 'The Rebels', 'Leviathan');
-
-
-
-
-
-
-
-
-
-
-
-SELECT *
-FROM PuzzleHas;
-
-SELECT *
-FROM ScoreOnPuzzle;
-
-SELECT *
-FROM ScoreOnPuzzle
-WHERE PuzzleID IN (SELECT PuzzleID FROM PuzzleHas);
-
 
 
 
