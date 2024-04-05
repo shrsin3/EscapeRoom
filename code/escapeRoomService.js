@@ -256,11 +256,9 @@ module.exports = {
     fetchHighRatingList,
     fetchEscapeRoomList,
     fetchReservationList,
-    initiateAllTables,
     reservationSelection,
     searchForTeam,
     checkReservationID,
     checkReservationConflict,
-    resetEscapeRoom,
-    fetchReservationByDay
+    resetEscapeRoom
 };

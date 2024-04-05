@@ -278,7 +278,6 @@ router.get('/escapeRoomList', async (req, res) => {
 router.get('/highRatingList', async (req, res) => {
     const score = req.query.score;
     const tableContent = await escapeRoomService.fetchHighRatingList(score);
-    console.log('controller: ', tableContent)
     res.json({data: tableContent});
 });
 
