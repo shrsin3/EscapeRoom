@@ -2,11 +2,16 @@ DROP TABLE ScoreOnPuzzle;
 DROP TABLE Fix;
 DROP TABLE PropHave;
 DROP TABLE Adjust;
-DROP Table PuzzleHas;
+DROP TABLE PuzzleHas;
 DROP TABLE BookingMakesFor;
 DROP TABLE EscapeRoom;
+DROP TABLE PlayerPartOf;
 DROP TABLE Team;
 DROP TABLE PuzzleDifficulty;
+DROP TABLE Employee;
+DROP TABLE Viewer;
+DROP TABLE PostalCity;
+DROP TABLE PositionSalary;
 DROP TABLE Users;
 
 CREATE TABLE EscapeRoom (
@@ -63,6 +68,40 @@ CREATE TABLE Users (
                        UNIQUE(Address, PostalCode)
 );
 
+CREATE TABLE PostalCity (
+                        PostalCode VARCHAR2(100) PRIMARY KEY, 
+                        City VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE Employee (
+                        Email VARCHAR2(100) PRIMARY KEY, 
+                        Position INTEGER NOT NULL,
+                        FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
+);
+
+CREATE TABLE PositionSalary (
+                        Position INTEGER PRIMARY KEY,
+                        PositionName VARCHAR2(100) NOT NULL UNIQUE,
+                        Salary INTEGER NOT NULL
+);
+            
+CREATE TABLE Viewer (
+                        Email VARCHAR2(100) PRIMARY KEY, 
+                        Age INTEGER NOT NULL,
+                        FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE
+);
+
+CREATE TABLE PlayerPartOf (
+                        Email VARCHAR2(100) PRIMARY KEY, 
+                        Alias VARCHAR2(100) NOT NULL UNIQUE,
+                        SkillLevel INTEGER DEFAULT 1,
+                        PlayingStyle VARCHAR2(100),
+                        Name VARCHAR2(100) NOT NULL,
+                        Since DATE,
+                        FOREIGN KEY (Email) REFERENCES Users(Email) ON DELETE CASCADE,
+                        FOREIGN KEY (Name) REFERENCES Team(Name)
+);    
+
 CREATE TABLE Fix(
                     Email varchar(50),
                     PropID integer,
@@ -101,6 +140,7 @@ INSERT INTO Team VALUES ('T369', 5);
 INSERT INTO Team VALUES ('Dragon Slayers', 7);
 INSERT INTO Team VALUES ('Let us cook', 4);
 INSERT INTO Team VALUES ('The Young Blood', 2);
+INSERT INTO Team VALUES ('Item Finder', 6)
 
 INSERT INTO PuzzleHas VALUES (1, 'Room lock', 'Marys Wonderland');
 INSERT INTO PuzzleHas VALUES (2, 'Shelf lock', 'Fifteen reasons Vincent lied');
@@ -123,14 +163,43 @@ INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 22, 7);
 INSERT INTO ScoreOnPuzzle VALUES ('Let us cook', 45, 4);
 INSERT INTO ScoreOnPuzzle VALUES ('The Young Blood', 100, 4);
 
-
-
 INSERT INTO PuzzleDifficulty VALUES ('Room lock', 4);
 INSERT INTO PuzzleDifficulty VALUES ('Shelf lock', 3);
 INSERT INTO PuzzleDifficulty VALUES ('Statue rotation', 5);
 
-INSERT INTO Users VALUES ('User1', 'user1@gmail.com', '1000 Bridgeport Rd', 'V6V A03', '123');
-INSERT INTO Users VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', '123');
+INSERT INTO Users VALUES ('User1', 'user1@gmail.com', '1000 Bridgeport Rd', 'V6V A03', 'gsoBlRHvRHJ3e8Y');
+INSERT INTO Users VALUES ('User2', 'user2@gmail.com', '435 Cambie St', 'F8S 4G3', 'ItqHYXMBATzEHqF');
+INSERT INTO Users VALUES ('User3', 'user3@gmail.com', '4090 Wrangler Rd', 'T1X 0K2', 'RN61tTRk5aQFglt');
+INSERT INTO Users VALUES ('User4', 'user4@gmail.com', '21 Brentwood Blvd', 'V6S 3B8', 'WtENtlwQJgGCjdy');
+INSERT INTO Users VALUES ('User5', 'user5@gmail.com', '78 Hanson St', 'M4C 1A1', 'b4Qv04Xg400ORPZ');
+
+INSERT INTO PostalCity (PostalCode, City) VALUES ('V6V A03', 'Vancouver')
+INSERT INTO PostalCity (PostalCode, City) VALUES ('F8S 4G3', 'Calgary')
+INSERT INTO PostalCity (PostalCode, City) VALUES ('T1X 0K2', 'Edmonton')
+INSERT INTO PostalCity (PostalCode, City) VALUES ('T1X 0K2', 'Toronto')
+INSERT INTO PostalCity (PostalCode, City) VALUES ('M4C 1A1', 'Richmond')
+
+INSERT INTO Employee (Email, Position) VALUES ('user1@gmail.com', 1)
+INSERT INTO Employee (Email, Position) VALUES ('user2@gmail.com', 2)
+INSERT INTO Employee (Email, Position) VALUES ('user3@gmail.com', 3)
+INSERT INTO Employee (Email, Position) VALUES ('user4@gmail.com', 4)
+
+INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (1, 'Company manager', 90000)
+INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (2, 'Front-desk', 50000)
+INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (3, 'Prop manager', 70000)
+INSERT INTO PositionSalary (Position, PositionName, Salary) VALUES (4, 'Puzzle design and refinements', 70000)
+
+INSERT INTO Viewer (Email, Age) VALUES ('user1@gmail.com', 25)
+INSERT INTO Viewer (Email, Age) VALUES ('user2@gmail.com', 33)
+
+INSERT INTO PlayerPartOf (Email, Alias, SkillLevel, PlayingStyle, Name, Since) VALUES ('user1@gmail.com', 'Cool', 5, 'Fast', 'Item Finder', TO_DATE('2022-09-03', 'yyyy/mm/dd'))
+INSERT INTO PlayerPartOf (Email, Alias, SkillLevel, PlayingStyle, Name, Since) VALUES ('user5@gmail.com', 'Sophine', 3, 'Careful', 'Let us cook', TO_DATE('2023-10-06', 'yyyy/mm/dd'))
+
+INSERT INTO Fix VALUES ('user3@gmail.com', 8)
+INSERT INTO Fix VALUES ('user3@gmail.com', 9)
+
+INSERT INTO Fix VALUES ('user3@gmail.com', 12)
+INSERT INTO Fix VALUES ('user3@gmail.com', 29)
 
 INSERT INTO BookingMakesFor VALUES ('292872', '2023-11-08', 'user1@gmail.com', 'SEN', 'Marys Wonderland');
 INSERT INTO BookingMakesFor VALUES ('292875', '2023-11-09', 'user2@gmail.com', 'SEN', 'The giggling');
