@@ -342,9 +342,10 @@ async function initialization() {
         console.log(statements);
 
         for (const statement of statements) {
-            console.log(statement)
+            console.log(statement);
             try {
-                await connection.execute(statement)
+                const result = await connection.execute(statement);
+                console.log(result);
             } catch (err) {
                 console.error(err);
             }
