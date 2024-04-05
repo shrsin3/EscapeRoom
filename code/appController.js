@@ -249,6 +249,11 @@ router.get('/teamNAvgScore', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/teamNameDivisionQuery', async (req, res) => {
+    const tableContent = await scoreService.fetchTeamNamesDivisionQuery();
+    res.json({data: tableContent});
+});
+
 router.get('/escapeRoomTable', async (req, res) => {
     const tableContent = await escapeRoomService.fetchEscapeRoomTable();
     res.json({data: tableContent});
@@ -342,5 +347,11 @@ router.get('/check-reservation-conflict', async (req,res) => {
     const tableContent = await escapeRoomService.checkReservationConflict(time, room);
     res.json({data: tableContent});
 })
+
+router.get('/teamLeaders', async (req, res) => {
+    const tableContent = await scoreService.fetchLeadingTeamNames();
+    res.json({data: tableContent});
+});
+
 
 module.exports = router;

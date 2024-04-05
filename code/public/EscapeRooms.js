@@ -25,7 +25,6 @@ async function fetchAndDisplayEscapeRooms() {
 
 async function insertNewRoom(event) {
     event.preventDefault();
-
     const thisName = document.getElementById('roomName').value;
     const thieGenre = document.getElementById('roomGenre').value;
     const thisTimeLimit = document.getElementById('timeLimit').value;
@@ -61,7 +60,7 @@ async function insertNewRoom(event) {
 }
 
 async function resetAllTables() {
-    const response = await fetch('/reset-all-tables', {
+    const response = await fetch('/reset-escape-room', {
         method: 'POST'
     });
     const responseData = await response.json();

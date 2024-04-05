@@ -168,6 +168,58 @@ async function fetchAndDisplayTeamNAvgScores() {
     });
 }
 
+async function fetchTeamsInAllRooms() {
+    console.log("Division Function Called");
+    const tableElement = document.getElementById('teamNameDivisionQuery');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/teamNameDivisionQuery', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const avgScoreTableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    avgScoreTableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+async function fetchTeamLeaders() {
+    console.log("Team Leader Function Called");
+    const tableElement = document.getElementById('teamLeaderTables');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/teamLeaders', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const avgScoreTableContent = responseData.data;
+
+    // Always clear old, already fetched data before new fetching process.
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    avgScoreTableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 window.onload = function() {
     checkDbConnection();
     fetchTableData()
@@ -175,6 +227,9 @@ window.onload = function() {
     document.getElementById("max").addEventListener("click", fetchAndDisplayTeamNMaxScores);
     document.getElementById("min").addEventListener("click", fetchAndDisplayTeamNMinScores);
     document.getElementById("avg").addEventListener("click", fetchAndDisplayTeamNAvgScores);
+    document.getElementById("divisionButton").addEventListener("click", fetchTeamsInAllRooms);
+    document.getElementById("teamLeaders").addEventListener("click", fetchTeamLeaders);
+
 
 }
 

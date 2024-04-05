@@ -106,7 +106,7 @@ async function searchForTeam(userEmail){
     });
 }
 
-async function initiateAllTables(){
+async function resetEscapeRoom(){
     return await appService.withOracleDB(async (connection) => {
         try {
             await connection.execute(`DROP TABLE RatingGivenToAssigns CASCADE CONSTRAINTS`);
@@ -260,5 +260,7 @@ module.exports = {
     reservationSelection,
     searchForTeam,
     checkReservationID,
-    checkReservationConflict
+    checkReservationConflict,
+    resetEscapeRoom,
+    fetchReservationByDay
 };

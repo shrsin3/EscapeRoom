@@ -198,6 +198,11 @@ async function updatePositionSalary() {
     var salaryValue = document.getElementById('salary').value;
     var positionNameValue = document.getElementById('positionName').value;
 
+    if (sessionStorage.getItem('Email') !== "user1@gmail.com") {
+        alert("You do not have permission to update salary.");
+        return;
+    }
+
     if (salaryValue.length === 0) {
         const tableElement = document.getElementById('PositionSalary');
         const tableBody = tableElement.querySelector('tbody');
