@@ -5,7 +5,6 @@ DROP TABLE Adjust CASCADE CONSTRAINTS;
 DROP TABLE PuzzleHas CASCADE CONSTRAINTS;
 DROP TABLE BookingMakesFor CASCADE CONSTRAINTS;
 DROP TABLE EscapeRoom CASCADE CONSTRAINTS;
-DROP TABLE Users CASCADE CONSTRAINTS;
 DROP TABLE PlayerPartOf CASCADE CONSTRAINTS;
 DROP TABLE Team CASCADE CONSTRAINTS;
 DROP TABLE PuzzleDifficulty CASCADE CONSTRAINTS;
@@ -14,6 +13,7 @@ DROP TABLE Viewer CASCADE CONSTRAINTS;
 DROP TABLE PostalCity CASCADE CONSTRAINTS;
 DROP TABLE PositionSalary CASCADE CONSTRAINTS;
 DROP TABLE RatingGivenToAssigns CASCADE CONSTRAINTS;
+DROP TABLE Users CASCADE CONSTRAINTS;
 CREATE TABLE EscapeRoom (
                             Name varchar2(100),
                             Genre varchar2(100),
@@ -110,7 +110,8 @@ CREATE TABLE BookingMakesFor (
                                  UserEmail varchar2(100) NOT NULL,
                                  TeamName varchar2(100),
                                  RoomName varchar2(100) NOT NULL,
-                                 FOREIGN KEY(RoomName) references EscapeRoom(Name)
+                                 FOREIGN KEY(RoomName) references EscapeRoom(Name),
+                                 FOREIGN KEY(TeamName) references Team(Name)
 );
 CREATE TABLE RatingGivenToAssigns (
                                       ID integer PRIMARY KEY,
